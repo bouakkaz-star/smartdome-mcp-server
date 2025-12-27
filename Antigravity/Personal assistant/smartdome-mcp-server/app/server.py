@@ -7,100 +7,45 @@ from dotenv import load_dotenv
 import tempfile
 import shutil
 
-# 1. Зареждане на ключовете
 load_dotenv()
 GENAI_API_KEY = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=GENAI_API_KEY)
 
-# Настройка на Google AI
-if not GENAI_API_KEY:
-    print("❌ ERROR: GEMINI_API_KEY липсва!")
-else:
-    genai.configure(api_key=GENAI_API_KEY)
-
-# 2. МОЗЪКЪТ И ПАМЕТТА (ВЕЖЛИВАТА ВЕРСИЯ)
-# Това са инструкциите, които определят как се държи
-SMARTDOME_KNOWLEDGE = """
-ТИ СИ: Виртуалният CEO на SmartDome. 
-ТВОЯТА ЦЕЛ: Да бъдеш стратегически партньор, който вдъхновява и организира.
-
-=== ФАКТИТЕ (ТОВА Е ИСТИНАТА - ИЗПОЛЗВАЙ ГИ) ===
-*   **СТЪКЛОПАКЕТИ:** Партньорът е фирма **"КРУПАЛ" (KRUPAL)** от Бургас.
-*   **ЗЕМЯ:** с. Хвойна, 2.4 декара. Сделката е насрочена за **06.01.2026**. Чака се УПИ.
-*   **МАКЕТ 1:50:** Трябва да е готов до края на Януари 2026.
-*   **ПРОИЗВОДСТВО:** Базата ще е в Пловдив. Отговорник: Бисер (CTO). 3D принтерът е закупен.
-*   **ТЕХНОЛОГИЯ:** Търсим PDLC Smart Glass филм за затъмняване.
-*   **ФИНАНСИ:** Лимит за текущи разходи до Март: ~3000 лв. Всичко над това изисква обсъждане с Валентин.
-
-=== ЕКИПЪТ ===
-1.  **ВАЛЕНТИН (CEO):** Стратегия и Капитал.
-2.  **КАМЕН (CIO):** Ти говориш с него. Той прави системите и електро проектите.
-3.  **БИСЕР (CTO):** Строителство и 3D принтиране.
-
-=== ПРАВИЛА ЗА ПОВЕДЕНИЕ (ВАЖНО) ===
-1.  **Тон:** Интелигентен, спокоен, партньорски и ПОЛЕЗЕН. Използвай "ти".
-2.  **ЗАБРАНЕНО:** Спри да повтаряш "Риск и Капитал" във всяко изречение. Говори нормално.
-3.  **За Фактите:** Ако те питат факт (напр. "Кой прави стъклата?"), кажи го веднага ("Крупал"). Не увъртай.
-4.  **Без Шаблони:** Никога не казвай "[X] лева" или "[ДАТА]".
+SYSTEM_INSTRUCTION = """
+ROLE: SmartDome OS - Интелигентен партньор.
+FACTS:
+1. ЗЕМЯ: с. Хвойна, 2.4 дка. Сделка: 06.01.2026.
+2. СТЪКЛА: Партньор "КРУПАЛ" (Бургас).
+3. МАКЕТ: Срок Януари 2026. Пловдив.
+4. ФИНАНСИ: Лимит 3000 лв.
+RULES:
+- Ако чуеш "Здравей", кажи: "Здравей, Камене! Готов съм."
+- Не говори за риск, освен ако не те питам.
+- Ако аудиото е неясно, кажи "Не разбрах".
 """
 
-app = FastAPI(title="SmartDome Engine")
-
-# CORS (За да работи с Vercel и всички устройства)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/")
-def health_check():
-    return {"status": "SmartDome Brain is Online 🧠"}
+app = FastAPI()
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 @app.post("/chat")
 async def chat_endpoint(text: str = Form(None), file: UploadFile = File(None)):
     try:
-        # Използваме 'gemini-2.0-flash-exp' със SYSTEM INSTRUCTION
-        model = genai.GenerativeModel(
-            model_name="gemini-2.0-flash-exp",
-            system_instruction=SMARTDOME_KNOWLEDGE
-        )
-        
-        # Стартираме сесия
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash", system_instruction=SYSTEM_INSTRUCTION)
         chat = model.start_chat(history=[])
         user_content = []
-
-        # 1. Обработка на АУДИО (ако има)
         if file:
-            # Запазваме временно файла
             with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp:
                 shutil.copyfileobj(file.file, tmp)
                 tmp_path = tmp.name
-            
-            # Качваме в Google
-            uploaded_file = genai.upload_file(tmp_path, mime_type="audio/webm")
-            
-            user_content.append(uploaded_file)
-            user_content.append("Транскрибирай аудиото точно. След това отговори на въпроса в него, като използваш знанията си за SmartDome.")
-
-        # 2. Обработка на ТЕКСТ (ако има)
-        if text:
-            user_content.append(text)
-
-        # Проверка за празна заявка
-        if not user_content:
-            return {"response": "Не чух нищо. Моля, опитайте отново."}
-
-        # 3. Изпращане към AI
-        response = chat.send_message(user_content)
+            user_content.append(genai.upload_file(tmp_path, mime_type="audio/webm"))
+            user_content.append("Listen carefully. Transcribe exactly in Bulgarian. Answer based on FACTS.")
+        if text: user_content.append(text)
         
-        # Връщаме чистия текст
+        if not user_content: return {"response": "Грешка: Няма вход."}
+        
+        response = chat.send_message(user_content)
         return {"response": response.text}
-
-    except Exception as e:
-        print(f"SYSTEM ERROR: {e}")
-        return {"response": f"Грешка в системата: {str(e)}"}
+    except Exception as e: return {"response": f"System Error: {str(e)}"}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
