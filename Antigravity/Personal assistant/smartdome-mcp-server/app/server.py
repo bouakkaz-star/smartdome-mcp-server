@@ -1,37 +1,86 @@
-from typing import Dict, Any, List, Callable
-from app.tools.notion_tool import create_notion_task
-# Ако нямаш drive_tool още, може да махнеш следващия ред, но ако го имаш - остави го
-# from app.tools.drive_tool import search_drive_pdfs 
-from app.tools.chat_tool import chat  # <--- НОВО 1: Внасяме инструмента
+import os
+import uvicorn
+from fastapi import FastAPI, UploadFile, Form, File
+from fastapi.middleware.cors import CORSMiddleware
+import google.generativeai as genai
+from dotenv import load_dotenv
+import tempfile
+import shutil
 
-class SmartDomeMCPServer:
-    def __init__(self):
-        self.tools: Dict[str, Callable] = {}
-        self._register_tools()
+# 1. Зареждане на средата
+load_dotenv()
+GENAI_API_KEY = os.getenv("GEMINI_API_KEY")
+if not GENAI_API_KEY:
+    print("❌ ERROR: GEMINI_API_KEY липсва!")
 
-    def _register_tools(self):
-        # Тук описваме какво може да прави роботът
-        self.register_tool("create_notion_task", create_notion_task)
-        # self.register_tool("search_drive_pdfs", search_drive_pdfs)
-        self.register_tool("chat", chat)  # <--- НОВО 2: Слагаме го в менюто
+genai.configure(api_key=GENAI_API_KEY)
 
-    def register_tool(self, name: str, func: Callable):
-        self.tools[name] = func
+# 2. КОНСТИТУЦИЯТА НА SMARTDOME (Това е паметта)
+SMARTDOME_KNOWLEDGE = """
+ТИ СИ: Виртуалният CEO на SmartDome. 
+ТВОЯТА ЦЕЛ: Да даваш точни, кратки и експертни отговори на екипа.
 
-    def get_tools_metadata(self) -> List[Dict[str, Any]]:
-        metadata = []
-        for name, func in self.tools.items():
-            metadata.append({
-                "name": name,
-                "description": func.__doc__.strip() if func.__doc__ else "No description",
-            })
-        return metadata
+=== ФАКТИТЕ (ТОВА Е ИСТИНАТА - НЕ ПИТАЙ, А ОТГОВАРЯЙ) ===
+*   **СТЪКЛОПАКЕТИ:** Партньорът е фирма **"КРУПАЛ" (KRUPAL)** от Бургас.
+*   **ЗЕМЯ:** с. Хвойна, 2.4 декара. Сделка на 06.01.2026. Чака се УПИ.
+*   **МАКЕТ:** Трябва да е готов до края на Януари 2026.
+*   **ПРОИЗВОДСТВО:** Базата ще е в Пловдив. Отговорник: Бисер.
+*   **ТЕХНОЛОГИЯ:** Търсим PDLC Smart Glass филм (затъмняване).
+*   **ФИНАНСИ:** Лимит до Март: 3000 лв. Одобрение само от Валентин.
 
-    async def execute_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Any:
-        if tool_name not in self.tools:
-            raise ValueError(f"Tool '{tool_name}' not found")
+=== ПРАВИЛА ЗА ПОВЕДЕНИЕ ===
+1.  Ако те питат факт (напр. "Кой прави стъклата?"), ОТГОВОРИ ВЕДНАГА с факта ("Крупал"). НЕ задавай въпроси обратно.
+2.  Говори на "ТИ". Бъди кратък.
+3.  Не използвай шаблони като "[X] лева".
+"""
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.post("/chat")
+async def chat_endpoint(text: str = Form(None), file: UploadFile = File(None)):
+    try:
+        # ТУК Е МАГИЯТА: system_instruction е по-силно от всичко
+        model = genai.GenerativeModel(
+            "gemini-2.0-flash-exp",
+            system_instruction=SMARTDOME_KNOWLEDGE
+        )
         
-        tool_func = self.tools[tool_name]
-        return await tool_func(**arguments)
+        # Стартираме празен чат - знанието вече е в "system_instruction"
+        chat = model.start_chat(history=[])
 
-server = SmartDomeMCPServer()
+        user_content = []
+        
+        # Аудио/Файл логика
+        if file:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp:
+                shutil.copyfileobj(file.file, tmp)
+                tmp_path = tmp.name
+            
+            uploaded_file = genai.upload_file(tmp_path, mime_type="audio/webm")
+            # Инструкция към аудиото
+            user_content.append(uploaded_file)
+            user_content.append("Транскрибирай това аудио и отговори на въпроса в него, използвайки знанията си за SmartDome.")
+
+        # Текст логика
+        if text:
+            user_content.append(text)
+
+        if not user_content:
+            return {"response": "Не чух нищо. Моля, повтори."}
+
+        response = chat.send_message(user_content)
+        return {"response": response.text}
+
+    except Exception as e:
+        return {"response": f"Грешка в мозъка: {str(e)}"}
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
