@@ -76,12 +76,27 @@ async def chat_endpoint(
     # FILE HANDLING
     file_content = None
     file_mime = None
+    transcribed_text = None
+    
     if file:
         content = await file.read()
         if "audio" in file.content_type or file.filename.endswith('.webm'):
-            base_prompt += "\nTASK: Transcribe audio ('🎤 [TRANSCRIPT]: ...'), then Answer."
             file_content = content
             file_mime = "audio/webm"
+            
+            # STEP 1: Transcribe the audio first
+            try:
+                transcribe_resp = client.models.generate_content(
+                    model="gemini-2.0-flash-exp",
+                    contents=[types.Content(role="user", parts=[
+                        types.Part.from_text(text="Transcribe this audio to text. Return ONLY the transcribed text, nothing else."),
+                        types.Part.from_bytes(data=file_content, mime_type=file_mime)
+                    ])],
+                    config=SAFETY_CONFIG
+                )
+                transcribed_text = transcribe_resp.text.strip()
+            except Exception as e:
+                return {"response": f"Transcription Error: {str(e)}"}
         else:
             try:
                 txt = content.decode("utf-8")
@@ -89,29 +104,32 @@ async def chat_endpoint(
                 zep.thread.add_messages(thread_id=thread_id, messages=[Message(role="user", content=f"Uploaded: {txt}")])
             except: pass
 
-    # GENERATE
-    user_msg = text if text else "Processing..."
+    # GENERATE AI RESPONSE
+    # If we transcribed audio, use the transcribed text as the user message
+    if transcribed_text:
+        user_msg = transcribed_text
+    else:
+        user_msg = text if text else "Processing..."
     
     try:
         model_name = "gemini-2.0-flash-exp"
         
-        if file_content:
-            resp = client.models.generate_content(
-                model=model_name,
-                contents=[types.Content(role="user", parts=[
-                    types.Part.from_text(text=f"{base_prompt}\nUSER INPUT: {user_msg}"),
-                    types.Part.from_bytes(data=file_content, mime_type=file_mime)
-                ])],
-                config=SAFETY_CONFIG
-            )
+        # STEP 2: Send the text (or transcribed text) to the AI for a real response
+        resp = client.models.generate_content(
+            model=model_name,
+            contents=[types.Content(role="user", parts=[
+                types.Part.from_text(text=f"{base_prompt}\nUSER INPUT: {user_msg}")
+            ])],
+            config=SAFETY_CONFIG
+        )
+        
+        # STEP 3: Format the response
+        if transcribed_text:
+            # Audio input: show transcript + AI response
+            final_response = f"🎤 [TRANSCRIPT]: {transcribed_text}\n\n{resp.text}"
         else:
-            resp = client.models.generate_content(
-                model=model_name,
-                contents=[types.Content(role="user", parts=[
-                    types.Part.from_text(text=f"{base_prompt}\nUSER INPUT: {user_msg}")
-                ])],
-                config=SAFETY_CONFIG
-            )
+            # Text input: just return AI response
+            final_response = resp.text
             
         try:
             zep.thread.add_messages(thread_id=thread_id, messages=[
@@ -120,7 +138,7 @@ async def chat_endpoint(
             ])
         except: pass
 
-        return {"response": resp.text}
+        return {"response": final_response}
 
     except Exception as e:
         return {"response": f"Error: {str(e)}"}
