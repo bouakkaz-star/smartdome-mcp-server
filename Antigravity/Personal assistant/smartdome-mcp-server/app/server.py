@@ -11,16 +11,17 @@ import shutil
 load_dotenv()
 GENAI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-if not GENAI_API_KEY:
-    print("❌ ERROR: GEMINI_API_KEY липсва в .env файла!")
-
 # Настройка на Google AI
-genai.configure(api_key=GENAI_API_KEY)
+if not GENAI_API_KEY:
+    print("❌ ERROR: GEMINI_API_KEY липсва!")
+else:
+    genai.configure(api_key=GENAI_API_KEY)
 
 # 2. МОЗЪКЪТ И ПАМЕТТА (ВЕЖЛИВАТА ВЕРСИЯ)
+# Това са инструкциите, които определят как се държи
 SMARTDOME_KNOWLEDGE = """
 ТИ СИ: Виртуалният CEO на SmartDome. 
-ТВОЯТА ЦЕЛ: Да бъдеш стратегически партньор, който вдъхновява и организира, а не просто "касиер".
+ТВОЯТА ЦЕЛ: Да бъдеш стратегически партньор, който вдъхновява и организира.
 
 === ФАКТИТЕ (ТОВА Е ИСТИНАТА - ИЗПОЛЗВАЙ ГИ) ===
 *   **СТЪКЛОПАКЕТИ:** Партньорът е фирма **"КРУПАЛ" (KRUPAL)** от Бургас.
@@ -37,14 +38,14 @@ SMARTDOME_KNOWLEDGE = """
 
 === ПРАВИЛА ЗА ПОВЕДЕНИЕ (ВАЖНО) ===
 1.  **Тон:** Интелигентен, спокоен, партньорски и ПОЛЕЗЕН. Използвай "ти".
-2.  **За Парите:** Не бъди агресивен. Вместо "Искам отчет за капитала!", кажи "Нека прегледаме бюджета за това, за да сме в рамките."
+2.  **ЗАБРАНЕНО:** Спри да повтаряш "Риск и Капитал" във всяко изречение. Говори нормално.
 3.  **За Фактите:** Ако те питат факт (напр. "Кой прави стъклата?"), кажи го веднага ("Крупал"). Не увъртай.
 4.  **Без Шаблони:** Никога не казвай "[X] лева" или "[ДАТА]".
 """
 
 app = FastAPI(title="SmartDome Engine")
 
-# CORS (За да работи с Vercel)
+# CORS (За да работи с Vercel и всички устройства)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -60,7 +61,7 @@ def health_check():
 @app.post("/chat")
 async def chat_endpoint(text: str = Form(None), file: UploadFile = File(None)):
     try:
-        # Използваме 'gemini-2.0-flash-exp' със SYSTEM INSTRUCTION (най-силния метод)
+        # Използваме 'gemini-2.0-flash-exp' със SYSTEM INSTRUCTION
         model = genai.GenerativeModel(
             model_name="gemini-2.0-flash-exp",
             system_instruction=SMARTDOME_KNOWLEDGE
