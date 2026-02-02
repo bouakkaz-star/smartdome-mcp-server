@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+httpx
+python-multipart
+google-generativeai>=0.8.3
+google-genai
+python-dotenv
+zep-cloud==3.13.0
+pytz
+slowapi

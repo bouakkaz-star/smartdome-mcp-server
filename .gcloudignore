@@ -1,0 +1,7 @@
+.env
+.git
+__pycache__
+venv
+*.log
+server_final.log
+app/server_final.log

@@ -1,0 +1,164 @@
+{
+    "project_name": "SmartDome OS v5",
+    "description": "Hub Model for Intelligent Architecture",
+    "version": "5.1.0",
+    "hapm_core_version": "5.0",
+    "engine_url_var": "VITE_API_URL",
+    "last_system_sync": "2026-01-28T22:57:59.287189+02:00",
+    "current_project_name": "Project Hvoya (Legacy Transition)",
+    "communication_standard": "v1_concise",
+    "active_skills": [
+        "Executive Summary",
+        "Technical Audit",
+        "Obra Superpowers",
+        "Tailwind Standards",
+        "Professional Tone",
+        "Active Enforcement"
+    ],
+    "directors": [
+        {
+            "id": "ceo",
+            "role": "Director Executive Operations",
+            "name": "Executive Ops AI",
+            "focus": "Execution, Vendor Strategy, High-Speed Operations",
+            "communication_standard": "v2_direct_execution",
+            "color": "bg-blue-600",
+            "icon": "UserIcon",
+            "avatar": "/ai_avatar_ceo_v2.png",
+            "prompt_file": "directives/smartdome/ceo.md",
+            "active_skills": [
+                "Brevity (BLUF)",
+                "Vendor Aggression",
+                "Technical Translation"
+            ]
+        },
+        {
+            "id": "cio",
+            "role": "Chief Information Officer",
+            "name": "CIO AI Agent",
+            "focus": "System Architect, Lead Integrator, Digital Brain",
+            "color": "bg-purple-600",
+            "icon": "CpuChipIcon",
+            "avatar": "/ai_avatar_cio_v2.png",
+            "prompt_file": "directives/smartdome/cio.md"
+        },
+        {
+            "id": "cto",
+            "role": "Chief Technology Officer",
+            "name": "CTO AI Agent",
+            "focus": "Engineering, Construction Physics, Prototyping",
+            "color": "bg-orange-600",
+            "icon": "WrenchScrewdriverIcon",
+            "avatar": "/ai_avatar_cto_v2.png",
+            "prompt_file": "directives/smartdome/cto.md"
+        },
+        {
+            "id": "cfo",
+            "role": "Chief Financial Officer",
+            "name": "CFO AI Agent",
+            "focus": "Financial Discipline, ROI, Reporting",
+            "color": "bg-emerald-600",
+            "icon": "BanknotesIcon",
+            "avatar": "/ai_avatar_cfo_v2.png",
+            "prompt_file": "directives/smartdome/cfo.md"
+        },
+        {
+            "id": "cmo",
+            "role": "Chief Marketing Officer",
+            "name": "CMO AI Agent",
+            "focus": "Brand Strategy, Market Growth",
+            "color": "bg-pink-600",
+            "icon": "MegaphoneIcon",
+            "avatar": "/ai_avatar_cmo_v2.png",
+            "prompt_file": "directives/smartdome/cmo.md"
+        },
+        {
+            "id": "clo",
+            "role": "Chief Legal Officer",
+            "name": "CLO AI Agent",
+            "focus": "Legal Protection, IP, Contracts",
+            "color": "bg-yellow-600",
+            "icon": "ScaleIcon",
+            "avatar": "/ai_avatar_ceo_v2.png",
+            "prompt_file": "directives/smartdome/clo.md"
+        },
+        {
+            "id": "ralf",
+            "role": "System Auditor",
+            "name": "RALF (System AI)",
+            "focus": "System Health, Logs, Auto-Recovery",
+            "color": "bg-slate-700",
+            "icon": "CommandLineIcon",
+            "avatar": "/ai_avatar_ralf_v2.png",
+            "prompt_file": "directives/smartdome/ralf.md"
+        },
+        {
+            "id": "designer",
+            "role": "Lead Designer",
+            "name": "Designer AI Agent",
+            "focus": "UI/UX, Brand Identity",
+            "color": "bg-rose-500",
+            "icon": "PaintBrushIcon",
+            "avatar": "/ai_avatar_cmo_v2.png",
+            "prompt_file": "directives/smartdome/designer.md"
+        }
+    ],
+    "system": {
+        "default_thread_prefix": "smartdome_clean",
+        "memory_provider": "zep_cloud",
+        "model_provider": "gemini-3-flash-preview",
+        "reporting_cycle": "Friday 17:00"
+    },
+    "participants": [
+        {
+            "id": "p_valentin",
+            "slug": "valentin-77",
+            "name": "Valentin Stoyanov",
+            "role": "CEO/Founder",
+            "access": [
+                "ceo",
+                "cmo",
+                "clo",
+                "designer"
+            ],
+            "password_hash": null,
+            "is_initialized": false
+        },
+        {
+            "id": "p_kamen",
+            "slug": "kamen-88",
+            "name": "Kamen Bouakkaz",
+            "role": "CIO/Architect",
+            "access": [
+                "cio",
+                "cmo",
+                "ralf",
+                "designer"
+            ],
+            "password_hash": null,
+            "is_initialized": false
+        },
+        {
+            "id": "p_biser",
+            "slug": "biser-99",
+            "name": "Biser Petrov",
+            "role": "CTO/Founder",
+            "access": [
+                "cto"
+            ],
+            "password_hash": null,
+            "is_initialized": false
+        },
+        {
+            "id": "p_raina",
+            "slug": "raina-00",
+            "name": "Raina Stoyanova",
+            "role": "CFO",
+            "access": [
+                "cfo"
+            ],
+            "password_hash": null,
+            "is_initialized": false
+        }
+    ]
+}

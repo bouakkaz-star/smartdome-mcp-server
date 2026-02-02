@@ -1,0 +1,18 @@
+=== SYSTEM DIAGNOSTIC ===
+
+📡 PINGING LOCALHOST [http://localhost:8080/debug/zep]...
+   ❌ UNREACHABLE: All connection attempts failed
+
+📡 PINGING CLOUD (SmartDome) [https://smartdome-engine-435849971140.europe-west1.run.app/debug/zep]...
+   ✅ ALIVE (200 OK)
+   📝 Response: {'status': 'connected', 'api_key_present': True, 'zep_initialized': True}
+
+🧠 CHECKING ZEP METADATA...
+   🧵 Thread 'default_thread': NOT FOUND/Error (headers: {'date': 'Mon, 19 Jan 2026 20:34:44 GMT', 'content-type': 'application/json; charset=utf-8', 'content-length': '24', 'connection': 'keep-alive', 'cf-ray': '9c091d554ff6b5c8-SOF', 'vary': 'Origin', 'x-content-type-options': 'nosniff', 'x-ratelimit-limit': '300', 'x-ratelimit-remaining': '295', 'x-ratelimit-reset': '1768854900', 'strict-transport-security': 'max-age=31536000; includeSubDomains', 'cf-cache-status': 'DYNAMIC', 'speculation-rules': '"/cdn-cgi/speculation"', 'server': 'cloudflare'}, status_code: 404, body: message='not found')
+   🧵 Thread 'smartdome_cio_thread_v3': FOUND
+      - Created: Unknown
+      - Metadata: {}
+
+=== SUMMARY ===
+❌ Local Backend is DOWN.
+✅ Cloud Backend is RUNNING (Active SmartDome Instance).

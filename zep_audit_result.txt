@@ -1,0 +1,15 @@
+🔍 DEBUG: Zep API Key: z_1dW...***
+
+--- 1. Fetching Recent Sessions/Threads ---
+Fetching Users...
+❌ Error fetching users: 'UserClient' object has no attribute 'list'
+
+--- 2. Fetching Recent Messages (from known threads) ---
+
+Checking Thread: default_thread
+
+Checking Thread: smartdome_cio_thread_v3
+
+Checking Thread: session_1
+
+Checking Thread: test_thread

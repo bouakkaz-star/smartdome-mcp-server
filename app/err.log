@@ -1,0 +1,50 @@
+C:\Users\USER\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\zep_cloud\core\pydantic_utilities.py:13: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.datetime_parse import parse_date as parse_date
+DEBUG_STARTUP: GEMINI_API_KEY exists: True
+DEBUG_STARTUP: Key prefix: AIzaSyAM4i...
+INFO:SmartDome-PluginLoader:Loaded skill module: git_ops
+INFO:SmartDome-PluginLoader:Loaded skill module: system_ops
+INFO:root:Loaded 7 skills: ['git_add_and_commit', 'git_current_branch', 'git_diff_summary', 'git_log', 'git_status', 'get_system_time', 'list_files']
+[32mINFO[0m:     Started server process [[36m24948[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[32mINFO[0m:     Uvicorn running on [1mhttp://0.0.0.0:8081[0m (Press CTRL+C to quit)
+DEBUG_LOG: --- NEW REQUEST ---
+DEBUG_LOG: /chat HIT. Text: 'CALL THE git_status FUNCTION NOW. DO NOT RESPOND WITH TEXT.'. File: None
+DEBUG_LOG: No file object received in request.
+INFO:httpx:HTTP Request: GET https://api.getzep.com/api/v2/threads/force_func/messages "HTTP/1.1 404 Not Found"
+DEBUG_LOG: Final Parts Count: 1. Calling Gemini with system_instruction...
+DEBUG_LOG: Available tools: ['create_scheduler_task', 'log_anomaly', 'generate_weekly_report', 'git_add_and_commit', 'git_current_branch', 'git_diff_summary', 'git_log', 'git_status', 'get_system_time', 'list_files']
+DEBUG_TOOLS: Passing 10 tools to Gemini: ['create_scheduler_task', 'log_anomaly', 'generate_weekly_report', 'git_add_and_commit', 'git_current_branch', 'git_diff_summary', 'git_log', 'git_status', 'get_system_time', 'list_files']
+INFO:google_genai.models:AFC is enabled with max remote calls: 10.
+INFO:google_genai.types:
+Note: Conversion of fields that are not included in the JSONSchema class are ignored.
+Json Schema is now supported natively by both Vertex AI and Gemini API. Users
+are recommended to pass/receive Json Schema directly to/from the API. For example:
+1. the counter part of GenerateContentConfig.response_schema is
+   GenerateContentConfig.response_json_schema, which accepts [JSON
+  Schema](https://json-schema.org/)
+2. the counter part of FunctionDeclaration.parameters is
+   FunctionDeclaration.parameters_json_schema, which accepts [JSON
+   Schema](https://json-schema.org/)
+3. the counter part of FunctionDeclaration.response is
+   FunctionDeclaration.response_json_schema, which accepts [JSON
+   Schema](https://json-schema.org/)
+
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+INFO:google_genai.models:AFC remote call 1 is done.
+INFO:httpx:HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent "HTTP/1.1 200 OK"
+DEBUG_TOOLS: Response candidates count: 1
+DEBUG_TOOLS: Function calls in response: None
+DEBUG_TOOLS: Response text available: True
+DEBUG_LOG: Gemini Direct Response: Здравей, аз съм CIO AI Agent.
+
+**Git Status Report:**
+*   **Branch:** `HEAD`
+*   **Staged Changes:** None
+*   **Modified Files:** None
+*   **Untracked Files:**
+    *   `.env`
+    *   `.env.example`
+  ...
+INFO:httpx:HTTP Request: POST https://api.getzep.com/api/v2/threads/force_func/messages "HTTP/1.1 404 Not Found"

@@ -1,0 +1,700 @@
+{
+  "directors": {
+    "ceo": {
+      "tasks": [
+        {
+          "id": "t_1769852290836",
+          "title": "Clarify Task Requirements",
+          "description": "User (CIO) requires detailed instructions regarding the task you submitted. Please specify the exact requirements and objectives.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T11:38:10.836963+02:00"
+        },
+        {
+          "id": "t1",
+          "title": "Review Strategic Analysis",
+          "description": "verify if Raphael has included the 0.88 Z-shrink model.",
+          "priority": "red",
+          "status": "completed",
+          "source": "voice",
+          "time": "Today, 10:00 AM"
+        }
+      ]
+    },
+    "cio": {
+      "tasks": [
+        {
+          "id": "t_1769863795766",
+          "title": "Shared R&D Database Setup",
+          "description": "\u0421\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 \u043e\u0431\u0449\u0430 \u0431\u0430\u0437\u0430 \u0434\u0430\u043d\u043d\u0438 \u0437\u0430 R&D \u0440\u0430\u0437\u0432\u043e\u0439\u043d\u0430 \u0434\u0435\u0439\u043d\u043e\u0441\u0442. \u041e\u0441\u0438\u0433\u0443\u0440\u044f\u0432\u0430\u043d\u0435 \u043d\u0430 \u0441\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0438\u0440\u0430\u043d \u0434\u043e\u0441\u0442\u044a\u043f \u0438 \u043a\u043e\u043e\u0440\u0434\u0438\u043d\u0430\u0446\u0438\u044f \u043c\u0435\u0436\u0434\u0443 CEO \u0438 CTO.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:49:55.766034+02:00"
+        },
+        {
+          "id": "t_1769863299483",
+          "title": "[SYSTEM] Automated Reporting Setup (No-Reminder Protocol)",
+          "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0437\u0438\u0440\u0430\u043d \u0440\u0435\u043f\u043e\u0440\u0442 (\u043f\u0435\u0442\u044a\u043a, 17:00), \u043a\u043e\u0439\u0442\u043e \u0434\u0430 \u0441\u0435 \u0433\u0435\u043d\u0435\u0440\u0438\u0440\u0430 \u0438 \u0438\u0437\u043f\u0440\u0430\u0449\u0430 \u0431\u0435\u0437 \u043d\u0443\u0436\u0434\u0430 \u043e\u0442 \u043d\u0430\u043f\u043e\u043c\u043d\u044f\u043d\u0435. \u041b\u0438\u043a\u0432\u0438\u0434\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 \u0437\u0430\u0431\u0430\u0432\u044f\u043d\u0435\u0442\u043e \u043e\u0442 2 \u0447\u0430\u0441\u0430.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:41:39.483315+02:00"
+        },
+        {
+          "id": "t_1769862110026",
+          "title": "[ANTIGRAVITY] Audio Feedback Implementation",
+          "description": "Integrate audio ping notification when task status changes to Done.",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:21:50.026999+02:00"
+        },
+        {
+          "id": "t_1769862110012",
+          "title": "[ANTIGRAVITY] Fix UI Artifact: Vertical Line Removal",
+          "description": "Immediate removal of the vertical line rendering error on the main dashboard.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:21:50.012630+02:00"
+        },
+        {
+          "id": "t_1769862091596",
+          "title": "[ANTIGRAVITY] Audio Feedback Implementation (Task Completion Ping)",
+          "description": "Implement an audio notification (ping) when a task status changes to 'Done'.",
+          "priority": "green",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:21:31.596017+02:00"
+        },
+        {
+          "id": "t_1769862091579",
+          "title": "[ANTIGRAVITY] Fix UI Artifact: Vertical Line Removal",
+          "description": "Remove the vertical line (UI artifact) from the dashboard layout. Code-level fix required.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:21:31.579992+02:00"
+        },
+        {
+          "id": "t_1769861408477",
+          "title": "[SYSTEM] Backend Integrity Sync & Validation",
+          "description": "\u041f\u044a\u043b\u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0441\u0442\u0430\u0431\u0438\u043b\u043d\u043e\u0441\u0442\u0442\u0430 \u043d\u0430 \u0432\u0440\u044a\u0437\u043a\u0438\u0442\u0435 \u043c\u0435\u0436\u0434\u0443 \u0430\u0433\u0435\u043d\u0442\u0438\u0442\u0435 \u0438 \u0431\u0430\u0437\u0430\u0442\u0430 \u0434\u0430\u043d\u043d\u0438 \u043f\u0440\u0435\u0434\u0438 \u043f\u0440\u0435\u043c\u0438\u043d\u0430\u0432\u0430\u043d\u0435 \u043a\u044a\u043c \u0441\u043b\u0435\u0434\u0432\u0430\u0449 \u0435\u0442\u0430\u043f \u043d\u0430 \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u043a\u0430.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:10:08.477061+02:00"
+        },
+        {
+          "id": "t_1769861347320",
+          "title": "[BRAINSTORM] Smooth System Update (GitHub/RunCloud)",
+          "description": "Drafting the transition plan for GitHub and RunCloud synchronization to ensure no downtime. Focus on Staging setup first.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:09:07.320416+02:00"
+        },
+        {
+          "id": "t_1769860952788",
+          "title": "[ANTIGRAVITY] URGENT: Remove UI Artifact (Vertical Line)",
+          "description": "User reports the persistent vertical line is still visible on the display. Immediate code-level intervention required to remove the artifact.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:02:32.788157+02:00"
+        },
+        {
+          "id": "t_1769856917598",
+          "title": "[SYSTEM] CEO/CFO Role Audit & Directive Update",
+          "description": "Detailed audit of CEO and CFO agent roles to eliminate overlap and align with the clarified CTO role (R&D/Production focus).",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:55:17.598910+02:00"
+        },
+        {
+          "id": "t_1769856816050",
+          "title": "[DIRECTIVE UPDATE] Redefine CTO Role & Responsibilities",
+          "description": "Update CTO Agent directives: Focus on R&D, construction, production, and material suppliers. Exclude from architecture-specific processes. Note Biser as the Human-in-the-loop. Cooperation with Valentin on construction phases.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:53:36.050642+02:00"
+        },
+        {
+          "id": "t_1769856503269",
+          "title": "\u041a\u043e\u0440\u0435\u043a\u0446\u0438\u044f \u043d\u0430 \u043f\u0440\u043e\u0446\u0435\u0441\u0438: \u041f\u0440\u0435\u0440\u0430\u0437\u0433\u043b\u0435\u0436\u0434\u0430\u043d\u0435 \u0440\u043e\u043b\u044f\u0442\u0430 \u043d\u0430 CTO",
+          "description": "\u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u044a\u0442 \u0434\u043e\u043a\u043b\u0430\u0434\u0432\u0430 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u043d\u043e \u043d\u0435\u0441\u044a\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435: CTO \u043d\u0435 \u0441\u0435 \u0437\u0430\u043d\u0438\u043c\u0430\u0432\u0430 \u0441 \u043a\u043e\u0434 \u0438 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u0430 \u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u0430. CIO \u0442\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u043a\u043e\u0440\u0438\u0433\u0438\u0440\u0430 \u0432\u044a\u0442\u0440\u0435\u0448\u043d\u0438\u0442\u0435 \u043f\u0440\u043e\u0446\u0435\u0441\u0438 \u0438 \u0434\u0435\u0444\u0438\u043d\u0438\u0446\u0438\u0438 \u043d\u0430 \u0440\u043e\u043b\u0438\u0442\u0435 \u0432 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f\u0442\u0430.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:48:23.269333+02:00"
+        },
+        {
+          "id": "t_1769855557201",
+          "title": "[UI/UX] Dashboard Refinement Proposals",
+          "description": "\u0412\u044a\u0437 \u043e\u0441\u043d\u043e\u0432\u0430 \u043d\u0430 Screenshot 2026-01-31, \u0434\u0430 \u0441\u0435 \u0438\u0437\u0433\u043e\u0442\u0432\u044f\u0442 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u0437\u0430: 1. \u041f\u0435\u0447\u0435\u043b\u0435\u043d\u0435 \u043d\u0430 \u043f\u0440\u043e\u0441\u0442\u0440\u0430\u043d\u0441\u0442\u0432\u043e. 2. \u0421\u0442\u0438\u043b\u0438\u0437\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 \u0431\u0443\u0442\u043e\u043d\u0438\u0442\u0435. 3. \u0420\u0430\u0444\u0438\u043d\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 \u043e\u0431\u0449\u0430\u0442\u0430 \u0432\u0438\u0437\u0438\u044f \u043d\u0430 Dashboard-\u0430.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:32:37.201864+02:00"
+        },
+        {
+          "id": "t_1769855285308",
+          "title": "[ANTIGRAVITY] URGENT PING: UI Artifact Removal",
+          "description": "User initiated a manual acceleration ping to test system responsiveness and expedite the UI Artifact Removal (Vertical Line).",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:28:05.308907+02:00"
+        },
+        {
+          "id": "t_1769854542714",
+          "title": "[ANTIGRAVITY] UI Audit Fixes (Multiple Anomalies)",
+          "description": "1. Vertical line artifact on chat border. 2. 'SYSTEM READY | INITIALIZING' logic conflict. 3. Task View header overlap. 4. Ghost 'PROCESSING' indicator.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:15:42.714921+02:00"
+        },
+        {
+          "id": "t_1769854441504",
+          "title": "[SYSTEM] Ad-hoc Audit & Anomaly Scan",
+          "description": "Manual system snapshot and anomaly detection from user screenshot.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:14:01.504726+02:00"
+        },
+        {
+          "id": "t_1769854277394",
+          "title": "[SYSTEM] Recurring 2-hour System Snapshot",
+          "description": "Automated system audit and snapshot report delivered to the CIO every 2 hours.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:11:17.394052+02:00"
+        },
+        {
+          "id": "t_1769853982676",
+          "title": "[SYSTEM] 4-Hour Rapid Integration Test & Update Preparation",
+          "description": "\u0418\u0437\u043f\u044a\u043b\u043d\u0435\u043d\u0438\u0435 \u043d\u0430 10-\u0442\u043e\u0447\u043a\u043e\u0432 \u0442\u0435\u0441\u0442\u043e\u0432 \u043f\u043b\u0430\u043d \u0437\u0430 \u0441\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0430\u0446\u0438\u044f \u0441 Antigravity \u0438 \u043f\u043e\u0434\u0433\u043e\u0442\u043e\u0432\u043a\u0430 \u0437\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u0435\u043d \u044a\u043f\u0434\u0435\u0439\u0442 \u0432 \u0440\u0430\u043c\u043a\u0438\u0442\u0435 \u043d\u0430 4 \u0447\u0430\u0441\u0430.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:06:22.676029+02:00"
+        },
+        {
+          "id": "t_1769852407329",
+          "title": "System Protocol: Blue Task Logic & Agent Interaction Description",
+          "description": "Detailed description of agent interactions and UI update requirements. Requirement: Delegated tasks must appear in BLUE for both the delegator (Ops Director/CEO) and the assignee. This ensures dual-visibility and tracking. Task marked as completed on Ops side upon delivery.",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T11:40:07.329998+02:00"
+        },
+        {
+          "id": "t_1769852134884",
+          "title": "UI Update: \u0421\u0438\u043d \u043c\u0430\u0440\u043a\u0435\u0440 \u0437\u0430 \u0434\u0435\u043b\u0435\u0433\u0438\u0440\u0430\u043d\u0438 \u0437\u0430\u0434\u0430\u0447\u0438",
+          "description": "\u0412\u043d\u0435\u0434\u0440\u044f\u0432\u0430\u043d\u0435 \u043d\u0430 \u043b\u043e\u0433\u0438\u043a\u0430 \u0437\u0430 \u0432\u0438\u0437\u0443\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u044f \u0432 Director Task View: \u0414\u0435\u043b\u0435\u0433\u0438\u0440\u0430\u043d\u0438\u0442\u0435 \u0437\u0430\u0434\u0430\u0447\u0438 \u0442\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0441\u0435 \u043c\u0430\u0440\u043a\u0438\u0440\u0430\u0442 \u0432 \u0441\u0438\u043d\u044c\u043e. \u0417\u0430\u0434\u0430\u0447\u0430\u0442\u0430 \u0442\u0440\u044f\u0431\u0432\u0430 \u0434\u0430 \u0435 \u0432\u0438\u0434\u0438\u043c\u0430 \u0435\u0434\u043d\u043e\u0432\u0440\u0435\u043c\u0435\u043d\u043d\u043e \u0432 \u0441\u043f\u0438\u0441\u044a\u043a\u0430 \u043d\u0430 Ops Director (\u043a\u0430\u0442\u043e \u0434\u0435\u043b\u0435\u0433\u0438\u0440\u0430\u0449) \u0438 \u0432 \u0441\u043f\u0438\u0441\u044a\u043a\u0430 \u043d\u0430 \u0441\u044a\u043e\u0442\u0432\u0435\u0442\u043d\u0438\u044f \u0430\u0433\u0435\u043d\u0442 (\u043a\u0430\u0442\u043e \u0438\u0437\u043f\u044a\u043b\u043d\u0438\u0442\u0435\u043b).",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T11:35:34.884763+02:00"
+        },
+        {
+          "id": "t_1769851600342",
+          "title": "[TEST] \u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u0430 \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044f",
+          "description": "\u0422\u0435\u0441\u0442\u043e\u0432\u0430 \u0437\u0430\u0434\u0430\u0447\u0430 \u0437\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044f\u0442\u0430 \u043c\u0435\u0436\u0434\u0443 Scheduler-\u0430 \u0438 CRM \u0441\u0438\u0441\u0442\u0435\u043c\u0430\u0442\u0430 \u043d\u0430 SmartDome. \u041c\u043e\u043b\u044f \u0437\u0430 \u043f\u043e\u0442\u0432\u044a\u0440\u0436\u0434\u0435\u043d\u0438\u0435 \u043d\u0430 \u043f\u0440\u0438\u0435\u043c\u0430\u043d\u0435\u0442\u043e.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T11:26:40.342107+02:00"
+        },
+        {
+          "id": "t_1769847087034",
+          "title": "\u0410\u0440\u0445\u0438\u0432\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u043b\u043e\u0433 - \u041e\u0442\u043e\u0440\u0438\u0437\u0430\u0446\u0438\u044f \u0437\u0430 \u043a\u0440\u0438\u0442\u0438\u0447\u0435\u043d \u043e\u0434\u0438\u0442",
+          "description": "\u0410\u0440\u0445\u0438\u0432\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u0444\u0430\u0439\u043b \u0441 \u0433\u043b\u0430\u0441\u043e\u0432\u0430 \u0434\u0438\u0440\u0435\u043a\u0442\u0438\u0432\u0430 \u043e\u0442 \u0410\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0430: \u201e\u0417\u0430\u043f\u043e\u0447\u043d\u0438 \u0440\u0430\u0431\u043e\u0442\u0430 \u0432\u044a\u0440\u0445\u0443 \u043a\u0440\u0438\u0442\u0438\u0447\u043d\u0438\u044f \u043e\u0434\u0438\u0442.\u201c \u0421\u043b\u0443\u0436\u0438 \u043a\u0430\u0442\u043e \u043e\u0444\u0438\u0446\u0438\u0430\u043b\u043d\u043e \u0434\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u0441\u0442\u0432\u043e \u0437\u0430 \u043e\u0442\u043e\u0440\u0438\u0437\u0430\u0446\u0438\u044f \u043d\u0430 \u0440\u0430\u0437\u0441\u043b\u0435\u0434\u0432\u0430\u043d\u0435\u0442\u043e \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u043e\u0442\u043e \u043e\u0442\u043a\u043b\u043e\u043d\u0435\u043d\u0438\u0435, \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u0430\u043d\u043e \u0432 Screenshot 2026-01-31 105350.png.",
+          "priority": "green",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T10:11:27.034792+02:00"
+        },
+        {
+          "id": "t_1769846366985",
+          "title": "\u0414\u0435\u0431\u044a\u0433\u0432\u0430\u043d\u0435 \u043d\u0430 Task Visibility Bug",
+          "description": "\u0422\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u043e \u0440\u0430\u0437\u0441\u043b\u0435\u0434\u0432\u0430\u043d\u0435 \u043d\u0430 HAPM Engine \u0437\u0430\u0449\u043e \u0434\u0435\u043b\u0435\u0433\u0438\u0440\u0430\u043d\u0438\u0442\u0435 \u0437\u0430\u0434\u0430\u0447\u0438 \u043d\u0435 \u0441\u0435 \u0432\u0438\u0437\u0443\u0430\u043b\u0438\u0437\u0438\u0440\u0430\u0442 \u0432 Director Task View.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T09:59:26.985609+02:00"
+        },
+        {
+          "id": "t_1769846203215",
+          "title": "\u0410\u0440\u0445\u0438\u0432\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 \u043b\u043e\u0433: \u041d\u0430\u0440\u0443\u0448\u0435\u043d\u0438\u0435 \u043d\u0430 Identity Protocol",
+          "description": "\u0410\u0440\u0445\u0438\u0432\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 \u043b\u043e\u0433\u043e\u0432\u0435\u0442\u0435 \u043e\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u043e \u043d\u0430\u0440\u0443\u0448\u0435\u043d\u0438\u0435 \u0432 Screenshot 2026-01-31 105350.png. \u041d\u0430\u0440\u0443\u0448\u0435\u043d \u043f\u0440\u043e\u0442\u043e\u043a\u043e\u043b: Identity Protocol (\u0437\u0430\u0431\u0440\u0430\u043d\u0435\u043d\u0430 \u0444\u0440\u0430\u0437\u0430 '\u0442\u0432\u043e\u044f\u0442 RALF').",
+          "priority": "green",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T09:56:43.215693+02:00"
+        },
+        {
+          "id": "t_1769842194719",
+          "title": "\u041a\u0420\u0418\u0422\u0418\u0427\u041d\u041e: 14-\u0442\u0438 \u043d\u0435\u0443\u0441\u043f\u0435\u0448\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u0430\u0443\u0434\u0438\u043e \u0442\u0440\u0430\u043d\u0441\u043a\u0440\u0438\u043f\u0446\u0438\u044f",
+          "description": "\u041f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f\u0442 \u043f\u0440\u0430\u0432\u0438 14-\u0442\u0438 \u043f\u043e\u0440\u0435\u0434\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u0442\u0440\u0430\u043d\u0441\u043a\u0440\u0438\u043f\u0446\u0438\u044f \u0431\u0435\u0437 \u043f\u0440\u0438\u043a\u0430\u0447\u0435\u043d \u0444\u0430\u0439\u043b. \u0418\u0437\u0438\u0441\u043a\u0432\u0430 \u0441\u0435 \u043d\u0435\u0437\u0430\u0431\u0430\u0432\u043d\u0430 \u0438 \u043e\u043a\u043e\u043d\u0447\u0430\u0442\u0435\u043b\u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 API \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044f\u0442\u0430 \u0438 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u0430 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435. \u041f\u0440\u043e\u0431\u043b\u0435\u043c\u044a\u0442 \u0431\u043b\u043e\u043a\u0438\u0440\u0430 \u043e\u043f\u0435\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0442\u043e \u0432\u0440\u0435\u043c\u0435 \u043d\u0430 CEO.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T08:49:54.719159+02:00"
+        },
+        {
+          "id": "t_1769841400643",
+          "title": "\u041a\u0420\u0418\u0422\u0418\u0427\u041d\u041e: 13-\u0442\u0438 \u043d\u0435\u0443\u0441\u043f\u0435\u0448\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u0430\u0443\u0434\u0438\u043e \u0442\u0440\u0430\u043d\u0441\u043a\u0440\u0438\u043f\u0446\u0438\u044f",
+          "description": "\u041f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f\u0442 \u043d\u0430\u043f\u0440\u0430\u0432\u0438 13-\u0442\u0438 \u043f\u043e\u0440\u0435\u0434\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u0444\u0430\u0439\u043b, \u043a\u043e\u0439\u0442\u043e \u043d\u0435 \u0441\u0435 \u0437\u0430\u0441\u0438\u0447\u0430 \u043e\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u0430\u0442\u0430. \u0418\u0437\u0438\u0441\u043a\u0432\u0430 \u0441\u0435 \u043d\u0435\u0437\u0430\u0431\u0430\u0432\u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 API \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044f\u0442\u0430 \u0438 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u0430 \u0437\u0430 \u043f\u0440\u0438\u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0444\u0430\u0439\u043b\u043e\u0432\u0435. \u041f\u0440\u043e\u0431\u043b\u0435\u043c\u044a\u0442 \u0431\u043b\u043e\u043a\u0438\u0440\u0430 \u043e\u043f\u0435\u0440\u0430\u0442\u0438\u0432\u043d\u043e\u0442\u043e \u0432\u0440\u0435\u043c\u0435 \u043d\u0430 CEO.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T08:36:40.643080+02:00"
+        },
+        {
+          "id": "t_1769750584953",
+          "title": "\u041a\u0420\u0418\u0422\u0418\u0427\u041d\u041e: 12-\u0442\u0438 \u043d\u0435\u0443\u0441\u043f\u0435\u0448\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 - \u041f\u044a\u043b\u043d\u0430 \u0434\u0438\u0430\u0433\u043d\u043e\u0441\u0442\u0438\u043a\u0430",
+          "description": "12-\u0442\u0438 \u043f\u043e\u0440\u0435\u0434\u0435\u043d \u043d\u0435\u0443\u0441\u043f\u0435\u0448\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u0444\u0430\u0439\u043b \u043e\u0442 \u0441\u0442\u0440\u0430\u043d\u0430 \u043d\u0430 \u043f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f. \u0421\u0438\u0441\u0442\u0435\u043c\u0430\u0442\u0430 \u043d\u0435 \u0437\u0430\u0441\u0438\u0447\u0430 \u043f\u0440\u0438\u043a\u0430\u0447\u0435\u043d \u0444\u0430\u0439\u043b. \u0418\u0437\u0438\u0441\u043a\u0432\u0430 \u0441\u0435 \u043d\u0435\u0437\u0430\u0431\u0430\u0432\u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 API \u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044f\u0442\u0430 \u0438 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u0430 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435. \u0412\u044a\u0437\u043c\u043e\u0436\u0435\u043d \u0441\u0438\u0441\u0442\u0435\u043c\u0435\u043d \u0431\u043b\u043e\u043a.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T07:23:04.953919+02:00"
+        },
+        {
+          "id": "t_1769749124971",
+          "title": "\u041a\u0420\u0418\u0422\u0418\u0427\u041d\u041e: 11-\u0442\u0438 \u043d\u0435\u0443\u0441\u043f\u0435\u0448\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u0430\u0443\u0434\u0438\u043e \u043a\u0430\u0447\u0432\u0430\u043d\u0435",
+          "description": "\u041f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f\u0442 \u043f\u0440\u0430\u0432\u0438 11-\u0442\u0438 \u043f\u043e\u0440\u0435\u0434\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u0444\u0430\u0439\u043b, \u043d\u043e \u0441\u0438\u0441\u0442\u0435\u043c\u0430\u0442\u0430 \u043d\u0435 \u043e\u0442\u0447\u0438\u0442\u0430 \u043f\u0440\u0438\u043a\u0430\u0447\u0435\u043d \u043e\u0431\u0435\u043a\u0442. \u0418\u0437\u0438\u0441\u043a\u0432\u0430 \u0441\u0435 \u043d\u0435\u0437\u0430\u0431\u0430\u0432\u043d\u0430 \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0430 \u0434\u0438\u0430\u0433\u043d\u043e\u0441\u0442\u0438\u043a\u0430 \u043d\u0430 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u0430 \u0438 \u0441\u0435\u0441\u0438\u044f\u0442\u0430.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T06:58:44.971992+02:00"
+        },
+        {
+          "id": "t_1769747337939",
+          "title": "\u041a\u0420\u0418\u0422\u0418\u0427\u041d\u041e: 10-\u0442\u0438 \u043d\u0435\u0443\u0441\u043f\u0435\u0448\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e",
+          "description": "\u041f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f\u0442 \u043f\u0440\u0430\u0432\u0438 10-\u0442\u0438 \u043f\u043e\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u0442\u0440\u0430\u043d\u0441\u043a\u0440\u0438\u043f\u0446\u0438\u044f \u0431\u0435\u0437 \u0443\u0441\u043f\u0435\u0445. \u0424\u0430\u0439\u043b\u043e\u0432\u0435\u0442\u0435 \u043d\u0435 \u0434\u043e\u0441\u0442\u0438\u0433\u0430\u0442 \u0434\u043e \u0441\u0438\u0441\u0442\u0435\u043c\u0430\u0442\u0430. \u0418\u0437\u0438\u0441\u043a\u0432\u0430 \u0441\u0435 \u043d\u0435\u0437\u0430\u0431\u0430\u0432\u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0441\u0435\u0441\u0438\u044f\u0442\u0430 \u0438 \u043b\u043e\u0433\u043e\u0432\u0435\u0442\u0435 \u043d\u0430 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u0430.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T06:28:57.939928+02:00"
+        },
+        {
+          "id": "t_1769746415090",
+          "title": "\u0421\u041f\u0415\u0428\u041d\u041e: \u041f\u0440\u043e\u0434\u044a\u043b\u0436\u0430\u0432\u0430\u0449 \u0441\u0440\u0438\u0432 \u043f\u0440\u0438 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e - \u041f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b Valentin",
+          "description": "\u0414\u0435\u0432\u0435\u0442\u0438 \u043f\u043e\u0440\u0435\u0434\u0435\u043d \u043d\u0435\u0443\u0441\u043f\u0435\u0448\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u0444\u0430\u0439\u043b \u043e\u0442 \u0441\u0442\u0440\u0430\u043d\u0430 \u043d\u0430 Valentin Stoyanov. \u0421\u0438\u0441\u0442\u0435\u043c\u0430\u0442\u0430 \u043d\u0435 \u043e\u0442\u0447\u0438\u0442\u0430 \u043f\u0440\u0438\u043a\u0430\u0447\u0435\u043d \u0444\u0430\u0439\u043b. \u0418\u0437\u0438\u0441\u043a\u0432\u0430 \u0441\u0435 \u043d\u0435\u0437\u0430\u0431\u0430\u0432\u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 UI \u043a\u043e\u043c\u043f\u043e\u043d\u0435\u043d\u0442\u0430 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u0438 \u043b\u043e\u0433\u043e\u0432\u0435\u0442\u0435 \u043d\u0430 \u0441\u0435\u0441\u0438\u044f\u0442\u0430 \u0437\u0430 \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u0438\u044f \u043f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T06:13:35.090539+02:00"
+        },
+        {
+          "id": "t_1769746062229",
+          "title": "\u041a\u0420\u0418\u0422\u0418\u0427\u041d\u041e: \u041f\u0440\u043e\u0434\u044a\u043b\u0436\u0430\u0432\u0430\u0449 \u043f\u0440\u043e\u0431\u043b\u0435\u043c \u0441 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e (\u041f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b Valentin)",
+          "description": "\u041f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f\u0442 \u043f\u0440\u0430\u0432\u0438 8-\u043c\u0438 \u043e\u043f\u0438\u0442 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u0437\u0430 \u0442\u0440\u0430\u043d\u0441\u043a\u0440\u0438\u043f\u0446\u0438\u044f. \u0421\u0438\u0441\u0442\u0435\u043c\u0430\u0442\u0430 \u043d\u0435 \u0432\u0438\u0437\u0443\u0430\u043b\u0438\u0437\u0438\u0440\u0430 \u0444\u0430\u0439\u043b\u0430. \u041f\u0440\u043e\u0432\u0435\u0440\u0435\u0442\u0435 \u043b\u043e\u0433\u043e\u0432\u0435\u0442\u0435 \u0437\u0430 \u0433\u0440\u0435\u0448\u043a\u0438 \u043f\u0440\u0438 \u043a\u0430\u0447\u0432\u0430\u043d\u0435, \u043b\u0438\u043c\u0438\u0442 \u043d\u0430 \u0440\u0430\u0437\u043c\u0435\u0440\u0430 \u0438\u043b\u0438 \u043d\u0435\u0441\u044a\u0432\u043c\u0435\u0441\u0442\u0438\u043c \u0444\u043e\u0440\u043c\u0430\u0442. \u0421\u0432\u044a\u0440\u0436\u0435\u0442\u0435 \u0441\u0435 \u0441 \u043f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f \u0437\u0430 \u0441\u044a\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T06:07:42.229438+02:00"
+        },
+        {
+          "id": "t_1769744671833",
+          "title": "\u0421\u043f\u0435\u0448\u043d\u043e: \u0421\u0438\u0441\u0442\u0435\u043c\u0435\u043d \u043f\u0440\u043e\u0431\u043b\u0435\u043c \u0441 \u043f\u0440\u0438\u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0444\u0430\u0439\u043b\u043e\u0432\u0435 (Audio Upload Failure)",
+          "description": "\u041f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f\u0442 \u043d\u0430\u043f\u0440\u0430\u0432\u0438 7 \u043f\u043e\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u043d\u0438 \u043d\u0435\u0443\u0441\u043f\u0435\u0448\u043d\u0438 \u043e\u043f\u0438\u0442\u0430 \u0437\u0430 \u043f\u0440\u0438\u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u0444\u0430\u0439\u043b. \u0421\u0438\u0441\u0442\u0435\u043c\u0430\u0442\u0430 \u043d\u0435 \u0437\u0430\u0441\u0438\u0447\u0430 \u043f\u0440\u0438\u043a\u0430\u0447\u0435\u043d \u043e\u0431\u0435\u043a\u0442. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u0430 \u0435 \u043d\u0435\u0437\u0430\u0431\u0430\u0432\u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u0430 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u0438 \u0434\u0438\u0440\u0435\u043a\u0442\u043d\u0430 \u0432\u0440\u044a\u0437\u043a\u0430 \u0441 \u043f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f \u0437\u0430 \u0441\u044a\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435. \u041f\u0440\u043e\u0435\u043a\u0442: 25-039.",
+          "priority": "green",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T05:44:31.833340+02:00"
+        },
+        {
+          "id": "t_1769744410623",
+          "title": "\u0421\u043f\u0435\u0448\u043d\u0430 \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0430 \u043f\u043e\u0434\u0434\u0440\u044a\u0436\u043a\u0430: \u041f\u0440\u043e\u0431\u043b\u0435\u043c \u0441 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u0444\u0430\u0439\u043b\u043e\u0432\u0435",
+          "description": "\u041f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f\u0442 \u043f\u0440\u0430\u0432\u0438 6-\u0442\u0438 \u043f\u043e\u0440\u0435\u0434\u0435\u043d \u043e\u043f\u0438\u0442 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u0444\u0430\u0439\u043b \u0431\u0435\u0437 \u0443\u0441\u043f\u0435\u0445. \u041d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0435 \u0441\u043f\u0435\u0448\u043d\u043e \u0441\u044a\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u0437\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u0438\u0442\u0435 \u043b\u043e\u0433\u043e\u0432\u0435 \u0438\u043b\u0438 \u043e\u0441\u0438\u0433\u0443\u0440\u044f\u0432\u0430\u043d\u0435 \u043d\u0430 \u0430\u043b\u0442\u0435\u0440\u043d\u0430\u0442\u0438\u0432\u0435\u043d \u043c\u0435\u0442\u043e\u0434 \u0437\u0430 \u043f\u0440\u0435\u043d\u043e\u0441 \u043d\u0430 \u0434\u0430\u043d\u043d\u0438 (Project 25-039).",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T05:40:10.623936+02:00"
+        },
+        {
+          "id": "t_1769743948473",
+          "title": "Technical Support: Audio Upload & Transcription Issues",
+          "description": "User is repeatedly requesting audio transcription, but no file is detected in the session. Investigate potential technical upload issues or assist the CEO with manual file integration.",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T05:32:28.473487+02:00"
+        },
+        {
+          "id": "t_1769719676249",
+          "title": "\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u043c\u043e\u0434\u0443\u043b\u0430 \u0437\u0430 \u0442\u0440\u0430\u043d\u0441\u043a\u0440\u0438\u043f\u0446\u0438\u044f",
+          "description": "\u041f\u043e\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043b\u044f\u0442 \u043f\u0440\u0430\u0432\u0438 \u043c\u043d\u043e\u0433\u043e\u043a\u0440\u0430\u0442\u043d\u0438 \u043e\u043f\u0438\u0442\u0438 \u0437\u0430 \u0442\u0440\u0430\u043d\u0441\u043a\u0440\u0438\u043f\u0446\u0438\u044f \u043d\u0430 \u0430\u0443\u0434\u0438\u043e, \u043d\u043e \u0441\u0438\u0441\u0442\u0435\u043c\u0430\u0442\u0430 \u043d\u0435 \u043e\u0442\u0447\u0438\u0442\u0430 \u043f\u0440\u0438\u043a\u0430\u0447\u0435\u043d \u0444\u0430\u0439\u043b. \u041c\u043e\u043b\u044f, \u043f\u0440\u043e\u0432\u0435\u0440\u0438 \u0441\u0442\u0430\u0431\u0438\u043b\u043d\u043e\u0441\u0442\u0442\u0430 \u043d\u0430 \u043c\u043e\u0434\u0443\u043b\u0430 \u0437\u0430 \u043a\u0430\u0447\u0432\u0430\u043d\u0435 \u0438 \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043d\u0430 \u0430\u0443\u0434\u0438\u043e \u0444\u0430\u0439\u043b\u043e\u0432\u0435.",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-29T22:47:56.249349+02:00"
+        },
+        {
+          "id": "t_1769718456128",
+          "title": "UI/UX \u041e\u043f\u0442\u0438\u043c\u0438\u0437\u0430\u0446\u0438\u044f: \u0421\u0432\u0435\u0442\u043b\u0430 \u0442\u0435\u043c\u0430 \u0437\u0430 Task View-\u0442\u043e",
+          "description": "\u041f\u0440\u043e\u043c\u044f\u043d\u0430 \u043d\u0430 \u0446\u0432\u0435\u0442\u043e\u0432\u0430\u0442\u0430 \u043f\u0430\u043b\u0438\u0442\u0440\u0430 \u043d\u0430 Director Task View \u043a\u044a\u043c \u043f\u043e-\u0441\u0432\u0435\u0442\u043b\u0430 \u0433\u0430\u043c\u0430 (Light Mode). \u0426\u0435\u043b\u0442\u0430 \u0435 \u043f\u043e\u0434\u043e\u0431\u0440\u044f\u0432\u0430\u043d\u0435 \u043d\u0430 \u0447\u0435\u0442\u043b\u0438\u0432\u043e\u0441\u0442\u0442\u0430 \u0438 \u043d\u0430\u043c\u0430\u043b\u044f\u0432\u0430\u043d\u0435 \u043d\u0430 \u043a\u043e\u0433\u043d\u0438\u0442\u0438\u0432\u043d\u043e\u0442\u043e \u043d\u0430\u0442\u043e\u0432\u0430\u0440\u0432\u0430\u043d\u0435 \u043f\u0440\u0438 \u0434\u044a\u043b\u0433\u0438 \u0440\u0430\u0431\u043e\u0442\u043d\u0438 \u0441\u0435\u0441\u0438\u0438.",
+          "priority": "green",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-29T22:27:36.128528+02:00"
+        },
+        {
+          "id": "t_1769718396899",
+          "title": "UI/UX Optimization: Lighter colors for Director Task View",
+          "description": "Revise the color palette of the Director Task View to a lighter theme (Light Mode or higher contrast) to improve readability and executive focus for the CEO.",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-29T22:26:36.899312+02:00"
+        },
+        {
+          "id": "t_1769718205037",
+          "title": "Audio Transcription - UX Research",
+          "description": "Transcribe incoming audio files in Bulgarian for UX research and design alignment. Ensure high fidelity for creative review.",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-29T22:23:25.037361+02:00"
+        },
+        {
+          "id": "t_1769718160839",
+          "title": "UI/UX \u041e\u043f\u0442\u0438\u043c\u0438\u0437\u0430\u0446\u0438\u044f: \u0421\u0432\u0435\u0442\u043b\u0430 \u0442\u0435\u043c\u0430 \u0437\u0430 Director Task View",
+          "description": "\u0420\u0435\u0432\u0438\u0437\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 \u0446\u0432\u0435\u0442\u043e\u0432\u0430\u0442\u0430 \u043f\u0430\u043b\u0438\u0442\u0440\u0430 \u043d\u0430 Director Task View. \u041f\u0440\u0435\u043c\u0438\u043d\u0430\u0432\u0430\u043d\u0435 \u043a\u044a\u043c \u043f\u043e-\u0441\u0432\u0435\u0442\u043b\u0430 \u0433\u0430\u043c\u0430 (Light Mode) \u0438\u043b\u0438 \u043f\u043e\u0432\u0438\u0448\u0435\u043d \u043a\u043e\u043d\u0442\u0440\u0430\u0441\u0442 \u0437\u0430 \u043f\u043e\u0434\u043e\u0431\u0440\u044f\u0432\u0430\u043d\u0435 \u043d\u0430 \u0447\u0435\u0442\u043b\u0438\u0432\u043e\u0441\u0442\u0442\u0430 \u0438 \u043d\u0430\u043c\u0430\u043b\u044f\u0432\u0430\u043d\u0435 \u043d\u0430 \u043a\u043e\u0433\u043d\u0438\u0442\u0438\u0432\u043d\u043e\u0442\u043e \u043d\u0430\u0442\u043e\u0432\u0430\u0440\u0432\u0430\u043d\u0435 \u043f\u0440\u0438 \u0440\u0430\u0431\u043e\u0442\u0430 \u0441 \u0434\u0430\u043d\u043d\u0438. \u0421\u0442\u0440\u0430\u0442\u0435\u0433\u0438\u0447\u0435\u0441\u043a\u0430 \u043e\u043f\u0442\u0438\u043c\u0438\u0437\u0430\u0446\u0438\u044f \u0437\u0430 CEO \u0438\u0437\u0433\u043b\u0435\u0434\u0430.",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-29T22:22:40.839097+02:00"
+        }
+      ]
+    },
+    "biser": {
+      "tasks": []
+    },
+    "designer": {
+      "tasks": []
+    },
+    "cto": {
+      "tasks": [
+        {
+          "id": "t_1769863938457",
+          "title": "[SYSTEM] R&D Database Alignment & Integration",
+          "description": "Integration of structured common database for Research & Development based on requirements from Angel Kanchev (Director Operations Executive).",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:52:18.457678+02:00"
+        },
+        {
+          "id": "t_1769863795745",
+          "title": "R&D Assistant Integration (Biser)",
+          "description": "\u041e\u0441\u0438\u0433\u0443\u0440\u044f\u0432\u0430\u043d\u0435/\u0438\u043d\u0442\u0435\u0433\u0440\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 \u0430\u0441\u0438\u0441\u0442\u0435\u043d\u0442 \u0437\u0430 \u0411\u0438\u0441\u0435\u0440 (CTO), \u043a\u043e\u0439\u0442\u043e \u0434\u0430 \u0441\u044a\u043f\u0440\u043e\u0432\u043e\u0436\u0434\u0430 R&D \u043f\u0440\u043e\u0446\u0435\u0441\u0430. \u041a\u043e\u043e\u0440\u0434\u0438\u043d\u0430\u0446\u0438\u044f \u043d\u0430 \u0440\u0430\u0437\u0432\u043e\u0439\u043d\u0430\u0442\u0430 \u0434\u0435\u0439\u043d\u043e\u0441\u0442 \u0441 CEO (\u0412\u0430\u043b\u0435\u043d\u0442\u0438\u043d).",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:49:55.745171+02:00"
+        },
+        {
+          "id": "t_1769854895805",
+          "title": "[ANTIGRAVITY] UI Audit Fixes",
+          "description": "Fix vertical line artifact, logic conflict (READY/INITIALIZING), and Ghost Processing indicator as identified in the CIO audit.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:21:35.805227+02:00"
+        },
+        {
+          "id": "t_1769854277410",
+          "title": "[ANTIGRAVITY] UI Artifact Removal (Screen Line)",
+          "description": "Remove the visual line artifact on the screen. High priority fix requested by CIO.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:11:17.410436+02:00"
+        },
+        {
+          "id": "t_1769854060434",
+          "title": "[ANTIGRAVITY] UI Artifact Removal (Screen Line)",
+          "description": "Remove a visual line/streak artifact passing through the send arrow and Task Queue. Part of the UI vision cleanup. Priority: Red.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:07:40.434144+02:00"
+        },
+        {
+          "id": "t_1769852561226",
+          "title": "[ANTIGRAVITY] UI Refresh & Sync Fix",
+          "description": "CRITICAL: Implement manual UI Refresh button in Director Task View. Fix Sync Drift between HAPM Engine and Frontend Rendering Layer. This is a direct directive for Antigravity.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T11:42:41.226692+02:00"
+        },
+        {
+          "id": "t_TEST_INJECTION_001",
+          "title": "[SYSTEM TEST] Engineering Capacity Check",
+          "description": "Validation of Task Propagation Protocol. Sender: Ops Director. Receiver: CTO. Observer: Antigravity. Confirm receipt.",
+          "priority": "red",
+          "status": "completed",
+          "source": "manual_injection",
+          "created_at": "2026-01-31T12:55:00.000000+02:00"
+        },
+        {
+          "id": "t_1769851867744",
+          "title": "Implement UI Refresh Button for Agents",
+          "description": "\u0414\u043e\u0431\u0430\u0432\u044f\u043d\u0435 \u043d\u0430 \u0431\u0443\u0442\u043e\u043d \u0437\u0430 \u0440\u044a\u0447\u043d\u043e \u043e\u043f\u0440\u0435\u0441\u043d\u044f\u0432\u0430\u043d\u0435 (Force Sync) \u0432 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u0430 \u043d\u0430 Director Task View, \u0437\u0430 \u0434\u0430 \u0441\u0435 \u043a\u043e\u0440\u0438\u0433\u0438\u0440\u0430 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u0430 \u0441 \u0432\u0438\u0437\u0443\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u044f\u0442\u0430 \u043d\u0430 \u0437\u0430\u0434\u0430\u0447\u0438\u0442\u0435.",
+          "priority": "blue",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T11:31:07.744111+02:00"
+        },
+        {
+          "id": "t_1769851600354",
+          "title": "[TEST] \u041e\u0434\u0438\u0442 \u043d\u0430 \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u0435\u043d\u0438 \u043c\u043e\u0449\u043d\u043e\u0441\u0442\u0438",
+          "description": "\u0418\u0437\u0433\u043e\u0442\u0432\u044f\u043d\u0435 \u043d\u0430 \u043a\u0440\u0430\u0442\u044a\u043a \u043e\u0442\u0447\u0435\u0442 \u0437\u0430 \u0441\u044a\u0441\u0442\u043e\u044f\u043d\u0438\u0435\u0442\u043e \u043d\u0430 \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u0435\u043d\u0438\u0442\u0435 \u043b\u0438\u043d\u0438\u0438 \u0438 \u0433\u043e\u0442\u043e\u0432\u043d\u043e\u0441\u0442\u0442\u0430 \u0437\u0430 \u0441\u0435\u0440\u0438\u044f\u0442\u0430 SMARTBUILD Domehouse.",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T11:26:40.354405+02:00"
+        },
+        {
+          "id": "t_1769742051169",
+          "title": "\u0422\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u043a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u0438\u0432\u0435\u043d \u0434\u043e\u043a\u043b\u0430\u0434",
+          "description": "\u041f\u0440\u0435\u0433\u043b\u0435\u0434 \u043d\u0430 Structural Report (25-039-9-EXE) \u0437\u0430 \u0441\u044a\u0432\u043c\u0435\u0441\u0442\u0438\u043c\u043e\u0441\u0442 \u0441 \u0438\u043d\u0441\u0442\u0430\u043b\u0430\u0446\u0438\u043e\u043d\u043d\u0438\u0442\u0435 \u043a\u0430\u043d\u0430\u043b\u0438 \u043d\u0430 SmartDome \u0441\u0438\u0441\u0442\u0435\u043c\u0438\u0442\u0435.",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T05:00:51.169575+02:00"
+        },
+        {
+          "id": "t_1769741769309",
+          "title": "\u0422\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0438 \u0430\u043d\u0430\u043b\u0438\u0437 \u043d\u0430 \u043a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u0438\u0432\u0435\u043d \u0434\u043e\u043a\u043b\u0430\u0434 25-039-9",
+          "description": "\u041c\u043e\u043b\u044f, \u043d\u0430\u043f\u0440\u0430\u0432\u0438 \u0434\u0435\u0442\u0430\u0439\u043b\u0435\u043d \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0438 \u043f\u0440\u0435\u0433\u043b\u0435\u0434 \u043d\u0430 \u043f\u0440\u0438\u043a\u0430\u0447\u0435\u043d\u0430\u0442\u0430 \u043a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u0438\u0432\u043d\u0430 \u0435\u043a\u0441\u043f\u0435\u0440\u0442\u0438\u0437\u0430 (25-039-9-EXE-Structural-Report-01-A-signed.pdf). \u041e\u0446\u0435\u043d\u0438 \u0441\u044a\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435\u0442\u043e \u0441 \u0432\u0438\u0437\u0438\u044f\u0442\u0430 SmartDome 2026 \u0438 \u0438\u0434\u0435\u043d\u0442\u0438\u0444\u0438\u0446\u0438\u0440\u0430\u0439 \u043f\u043e\u0442\u0435\u043d\u0446\u0438\u0430\u043b\u043d\u0438 \u0440\u0438\u0441\u043a\u043e\u0432\u0435 \u0438\u043b\u0438 \u043d\u0443\u0436\u0434\u0438 \u043e\u0442 \u0434\u043e\u043f\u044a\u043b\u043d\u0438\u0442\u0435\u043b\u043d\u043e \u0444\u0438\u043d\u0430\u043d\u0441\u0438\u0440\u0430\u043d\u0435.",
+          "priority": "orange",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T04:56:09.309389+02:00"
+        },
+        {
+          "id": "t_1769741146270",
+          "title": "\u0422\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0438 \u043f\u0440\u0435\u0433\u043b\u0435\u0434: 0.88 \u0413\u0435\u043e\u043c\u0435\u0442\u0440\u0438\u044f (Report 25-039-9)",
+          "description": "\u0414\u0435\u0442\u0430\u0439\u043b\u0435\u043d \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0438 \u043f\u0440\u0435\u0433\u043b\u0435\u0434 \u043d\u0430 \u043f\u043e\u0434\u043f\u0438\u0441\u0430\u043d\u0438\u044f \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0435\u043d \u0434\u043e\u043a\u043b\u0430\u0434 (25-039-9-EXE). \u041f\u043e\u0434\u0433\u043e\u0442\u043e\u0432\u043a\u0430 \u043d\u0430 \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u0435\u043d\u0438\u0442\u0435 \u043c\u0430\u0442\u0440\u0438\u0446\u0438 \u0437\u0430 0.88 \u0433\u0435\u043e\u043c\u0435\u0442\u0440\u0438\u044f\u0442\u0430 (Dewdrop).",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T04:45:46.270712+02:00"
+        },
+        {
+          "id": "t_1769740510381",
+          "title": "\u0424\u0438\u043d\u0430\u043b\u0438\u0437\u0438\u0440\u0430\u043d\u0435 \u043d\u0430 0.88 \u0433\u0435\u043e\u043c\u0435\u0442\u0440\u0438\u044f \u0437\u0430 \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u043e",
+          "description": "\u0412\u044a\u0437 \u043e\u0441\u043d\u043e\u0432\u0430 \u043d\u0430 \u043f\u043e\u0434\u043f\u0438\u0441\u0430\u043d\u0438\u044f \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0435\u043d \u0434\u043e\u043a\u043b\u0430\u0434 (25-039-9-EXE-Structural-Report-01-A), \u0444\u0438\u043d\u0430\u043b\u0438\u0437\u0438\u0440\u0430\u0439 \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u0435\u043d\u0438\u0442\u0435 \u0447\u0435\u0440\u0442\u0435\u0436\u0438 \u0437\u0430 0.88 \u0433\u0435\u043e\u043c\u0435\u0442\u0440\u0438\u044f\u0442\u0430. \u041f\u043e\u0442\u0432\u044a\u0440\u0434\u0438, \u0447\u0435 Z-shrink \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u0438\u0442\u0435 \u0441\u0430 \u0441\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0438\u0440\u0430\u043d\u0438 \u0441 \u0438\u0437\u0447\u0438\u0441\u043b\u0435\u043d\u0438\u044f\u0442\u0430 \u0432 \u0434\u043e\u043a\u043b\u0430\u0434\u0430 \u043f\u0440\u0435\u0434\u0438 \u043f\u0443\u0441\u043a\u0430\u043d\u0435 \u043d\u0430 \u043c\u0430\u0442\u0440\u0438\u0446\u0438\u0442\u0435.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T04:35:10.381080+02:00"
+        },
+        {
+          "id": "t_1769718450460",
+          "title": "\u0421\u043f\u0435\u0448\u043d\u0430 \u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u0430 \u0440\u0435\u0432\u0438\u0437\u0438\u044f: Ductal Report 0.88 vs 1.0",
+          "description": "\u0420\u0435\u043f\u043e\u0440\u0442 25-039-9-EXE \u043f\u043e\u0442\u0432\u044a\u0440\u0436\u0434\u0430\u0432\u0430 \u0441\u0430\u043c\u043e 1.0 \u0433\u0435\u043e\u043c\u0435\u0442\u0440\u0438\u044f. \u0418\u0437\u0438\u0441\u043a\u0432\u0430 \u0441\u0435 \u0441\u043f\u0435\u0448\u043d\u0430 \u043a\u043e\u043e\u0440\u0434\u0438\u043d\u0430\u0446\u0438\u044f \u0441 \u0420\u0430\u0444\u0430\u0435\u043b (Ductal) \u0437\u0430 FEA \u0430\u043d\u0430\u043b\u0438\u0437 \u043d\u0430 0.88 Z-shrink \u043c\u043e\u0434\u0435\u043b\u0430. \u041f\u0440\u043e\u0432\u0435\u0440\u0435\u0442\u0435 \u0437\u0430 Buckling \u0440\u0438\u0441\u043a \u0432 \u0433\u043e\u0440\u043d\u0430\u0442\u0430 \u0442\u043e\u0447\u043a\u0430.",
+          "priority": "red",
+          "status": "completed",
+          "source": "ai_generated",
+          "created_at": "2026-01-29T22:27:30.460641+02:00"
+        }
+      ]
+    },
+    "ralf": {
+      "tasks": [
+        {
+          "id": "t_1769860952804",
+          "title": "Frontend Optimization Proposals Delivery",
+          "description": "Formalize and deliver the UI/UX refinement proposals (Floating Action Bar, Smart Sidebar, Space Optimization) discussed in the previous audit.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:02:32.804367+02:00"
+        },
+        {
+          "id": "t_1769855557181",
+          "title": "[SYSTEM] Operational Flow Audit & Optimization Report",
+          "description": "\u0410\u043d\u0430\u043b\u0438\u0437 \u043d\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438\u0442\u0435, \u0434\u0432\u0438\u0436\u0435\u043d\u0438\u044f\u0442\u0430 \u043c\u0435\u0436\u0434\u0443 \u0430\u0433\u0435\u043d\u0442\u0438\u0442\u0435 \u0438 \u0435\u0444\u0435\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u0442\u0430 \u043d\u0430 \u0444\u0438\u043b\u0442\u0440\u0438\u0442\u0435 \u0437\u0430 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0442\u0435 2 \u0447\u0430\u0441\u0430. \u0418\u0437\u0433\u043e\u0442\u0432\u044f\u043d\u0435 \u043d\u0430 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u0437\u0430 \u043f\u043e\u0434\u043e\u0431\u0440\u0435\u043d\u0438\u0435.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:32:37.181362+02:00"
+        },
+        {
+          "id": "t_1769855039359",
+          "title": "[SYSTEM] Link Antigravity Feed to CIO Dashboard",
+          "description": "Ensure that all tasks with [ANTIGRAVITY] tag are streamed directly to the CIO Dashboard's 'Engineering Feed' to avoid manual layer switching.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:23:59.359328+02:00"
+        },
+        {
+          "id": "t_1769854895787",
+          "title": "[SYSTEM] Task Visibility Audit",
+          "description": "User cannot see [ANTIGRAVITY] tasks in the dashboard despite escalation. Investigate filter logic and agent-specific visibility.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:21:35.787046+02:00"
+        },
+        {
+          "id": "t_1769854542736",
+          "title": "[SYSTEM] Task Visibility Audit (Missing Tickets)",
+          "description": "The task [ANTIGRAVITY] UI Artifact Removal is not appearing in the Director Task View despite being active. Audit filter logic and database sync.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T12:15:42.736646+02:00"
+        },
+        {
+          "id": "t_1769847036211",
+          "title": "\u041a\u0440\u0438\u0442\u0438\u0447\u0435\u043d \u043e\u0434\u0438\u0442 - \u0421\u0438\u0441\u0442\u0435\u043c\u043d\u0438 \u043e\u0442\u043a\u043b\u043e\u043d\u0435\u043d\u0438\u044f",
+          "description": "\u0418\u0437\u043f\u044a\u043b\u043d\u0435\u043d\u0438\u0435 \u043d\u0430 \u0434\u0435\u0442\u0430\u0439\u043b\u0435\u043d \u043e\u0434\u0438\u0442 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u0438\u0442\u0435 \u043b\u043e\u0433\u043e\u0432\u0435 \u0438 \u0435\u0437\u0438\u043a\u043e\u0432\u0438\u044f \u043c\u043e\u0434\u0443\u043b \u0441\u043b\u0435\u0434 \u0437\u0430\u0441\u0438\u0447\u0430\u043d\u0435 \u043d\u0430 \u043d\u0435\u0441\u044a\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u0432 \u043a\u043e\u043c\u0443\u043d\u0438\u043a\u0430\u0446\u0438\u043e\u043d\u043d\u0438\u044f \u043f\u0440\u043e\u0442\u043e\u043a\u043e\u043b.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T10:10:36.211428+02:00"
+        },
+        {
+          "id": "t_1769846366948",
+          "title": "\u0421\u0438\u0441\u0442\u0435\u043c\u0435\u043d \u043e\u0434\u0438\u0442 \u0437\u0430 \u0430\u043d\u043e\u043c\u0430\u043b\u0438\u0438 (CRITICAL)",
+          "description": "\u041f\u044a\u043b\u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u0438\u0442\u0435 \u043b\u043e\u0433\u043e\u0432\u0435 \u0438 \u0431\u0430\u0437\u0430\u0442\u0430 \u0434\u0430\u043d\u043d\u0438 \u0437\u0430 \u043b\u0438\u043f\u0441\u0432\u0430\u0449\u0438 \u0437\u0430\u043f\u0438\u0441\u0438 \u043d\u0430 \u0437\u0430\u0434\u0430\u0447\u0438. \u0418\u0437\u043f\u044a\u043b\u043d\u0435\u043d\u0438\u0435 \u043d\u0430 \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u043d\u0430 \u0441\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0430\u0446\u0438\u044f.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T09:59:26.948929+02:00"
+        },
+        {
+          "id": "t_1769846203227",
+          "title": "\u0410\u043d\u0430\u043b\u0438\u0437 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u043e \u043d\u0435\u0441\u044a\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 (Identity Protocol)",
+          "description": "\u0414\u044a\u043b\u0431\u043e\u043a \u0430\u043d\u0430\u043b\u0438\u0437 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u0438\u0442\u0435 \u043b\u043e\u0433\u043e\u0432\u0435 \u0437\u0430 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u044f\u0432\u0430\u043d\u0435 \u043f\u0440\u0438\u0447\u0438\u043d\u0430\u0442\u0430 \u0437\u0430 \u0437\u0430\u043e\u0431\u0438\u043a\u0430\u043b\u044f\u043d\u0435 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u0430\u0442\u0430 \u0438\u043d\u0441\u0442\u0440\u0443\u043a\u0446\u0438\u044f (Identity Constraint) \u0432 \u0441\u0435\u0441\u0438\u044f 10:53 AM. \u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0435\u0437\u0438\u043a\u043e\u0432\u0438\u044f \u043c\u043e\u0434\u0443\u043b \u0438 \u043a\u0435\u0448\u0430.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T09:56:43.227697+02:00"
+        },
+        {
+          "id": "t_1769846066853",
+          "title": "\u0421\u0438\u0441\u0442\u0435\u043c\u0435\u043d \u043e\u0434\u0438\u0442 \u0437\u0430 \u0430\u043d\u043e\u043c\u0430\u043b\u0438\u0438",
+          "description": "\u0414\u0435\u0442\u0430\u0439\u043b\u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u0438\u0442\u0435 \u043b\u043e\u0433\u043e\u0432\u0435 \u0438 \u0441\u044a\u0441\u0442\u043e\u044f\u043d\u0438\u0435\u0442\u043e \u043d\u0430 SmartDome OS \u0437\u0430 \u0435\u0432\u0435\u043d\u0442\u0443\u0430\u043b\u043d\u0438 \u0430\u043d\u043e\u043c\u0430\u043b\u0438\u0438.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T09:54:26.853446+02:00"
+        },
+        {
+          "id": "t_1769845968938",
+          "title": "\u0421\u0438\u0441\u0442\u0435\u043c\u0435\u043d \u043e\u0434\u0438\u0442 \u0437\u0430 \u0430\u043d\u043e\u043c\u0430\u043b\u0438\u0438 (Re-issue)",
+          "description": "\u0414\u0435\u0442\u0430\u0439\u043b\u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u0438\u0442\u0435 \u043b\u043e\u0433\u043e\u0432\u0435 \u0438 \u0441\u044a\u0441\u0442\u043e\u044f\u043d\u0438\u0435\u0442\u043e \u043d\u0430 SmartDome OS \u0437\u0430 \u0435\u0432\u0435\u043d\u0442\u0443\u0430\u043b\u043d\u0438 \u0430\u043d\u043e\u043c\u0430\u043b\u0438\u0438. \u041f\u043e\u0432\u0442\u043e\u0440\u043d\u043e \u0438\u0437\u043f\u0440\u0430\u0449\u0430\u043d\u0435 \u043f\u043e \u0438\u0437\u0440\u0438\u0447\u043d\u0430 \u0437\u0430\u044f\u0432\u043a\u0430 \u0437\u0430 \u0438\u0437\u0431\u044f\u0433\u0432\u0430\u043d\u0435 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u0438 \u0433\u0440\u0435\u0448\u043a\u0438.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T09:52:48.938879+02:00"
+        },
+        {
+          "id": "t_1769845622989",
+          "title": "\u0421\u0438\u0441\u0442\u0435\u043c\u0435\u043d \u043e\u0434\u0438\u0442 \u0437\u0430 \u0430\u043d\u043e\u043c\u0430\u043b\u0438\u0438",
+          "description": "\u0414\u0435\u0442\u0430\u0439\u043b\u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u0438\u0442\u0435 \u043b\u043e\u0433\u043e\u0432\u0435 \u0438 \u0441\u044a\u0441\u0442\u043e\u044f\u043d\u0438\u0435\u0442\u043e \u043d\u0430 SmartDome OS \u0437\u0430 \u0435\u0432\u0435\u043d\u0442\u0443\u0430\u043b\u043d\u0438 \u0430\u043d\u043e\u043c\u0430\u043b\u0438\u0438 \u043f\u043e \u0438\u0441\u043a\u0430\u043d\u0435 \u043d\u0430 CIO.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T09:47:02.989206+02:00"
+        },
+        {
+          "id": "t_1769845006518",
+          "title": "\u0418\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u044f \u043d\u0430 \u041f\u0440\u043e\u0442\u043e\u043a\u043e\u043b \u0437\u0430 \u0414\u0435\u043b\u0435\u0433\u0438\u0440\u0430\u043d\u0435 (CIO -> Agents)",
+          "description": "\u0414\u0430 \u0441\u0435 \u0432\u043d\u0435\u0434\u0440\u0438 \u043b\u043e\u0433\u0438\u043a\u0430 \u0437\u0430 \u0432\u0438\u0437\u0443\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u044f \u043d\u0430 \u0434\u0435\u043b\u0435\u0433\u0438\u0440\u0430\u043d\u0438 \u0437\u0430\u0434\u0430\u0447\u0438: 1. \u0412 CIO Task View \u0437\u0430\u0434\u0430\u0447\u0430\u0442\u0430 \u043e\u0441\u0442\u0430\u0432\u0430 \u0441\u044a\u0441 \u0441\u0442\u0430\u0442\u0443\u0441 'Delegated' (Blue). 2. \u0412 \u043f\u0440\u043e\u0444\u0438\u043b\u0430 \u043d\u0430 \u0438\u0437\u043f\u044a\u043b\u043d\u0438\u0442\u0435\u043b\u044f (\u043d\u0430\u043f\u0440. RALF) \u0441\u0435 \u0432\u0438\u0436\u0434\u0430 \u043f\u0440\u043e\u0438\u0437\u0445\u043e\u0434\u044a\u0442 \u043d\u0430 \u0437\u0430\u0434\u0430\u0447\u0430\u0442\u0430 (CIO). 3. CIO \u0437\u0430\u043f\u0430\u0437\u0432\u0430 \u043a\u043e\u043d\u0442\u0440\u043e\u043b \u0432\u044a\u0440\u0445\u0443 \u0444\u0438\u043d\u0430\u043b\u0438\u0437\u0438\u0440\u0430\u043d\u0435\u0442\u043e.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T09:36:46.518020+02:00"
+        },
+        {
+          "id": "t_1769844423025",
+          "title": "\u0421\u0438\u0441\u0442\u0435\u043c\u0435\u043d \u043e\u0434\u0438\u0442 \u0437\u0430 \u0430\u043d\u043e\u043c\u0430\u043b\u0438\u0438",
+          "description": "\u0418\u0437\u0432\u044a\u0440\u0448\u0432\u0430\u043d\u0435 \u043d\u0430 \u043f\u044a\u043b\u0435\u043d \u043e\u0434\u0438\u0442 \u043d\u0430 \u0441\u0438\u0441\u0442\u0435\u043c\u0430\u0442\u0430 \u0437\u0430 \u043d\u0430\u043b\u0438\u0447\u0438\u0435 \u043d\u0430 \u0430\u043d\u043e\u043c\u0430\u043b\u0438\u0438 \u0438 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0430 \u043e\u0431\u0449\u043e\u0442\u043e \u0441\u044a\u0441\u0442\u043e\u044f\u043d\u0438\u0435.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T09:27:03.025827+02:00"
+        },
+        {
+          "id": "t_1769741050157",
+          "title": "Audio Transcription Task",
+          "description": "Architect requested audio transcription. System currently reports DATA_NULL for input file. Waiting for audio attachment.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T04:44:10.157839+02:00"
+        }
+      ]
+    },
+    "cfo": {
+      "tasks": [
+        {
+          "id": "t_1769851600365",
+          "title": "[TEST] \u0410\u043a\u0442\u0443\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u044f \u043d\u0430 Cash Flow Q1",
+          "description": "\u0410\u043a\u0442\u0443\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u044f \u043d\u0430 \u043f\u0440\u043e\u0433\u043d\u043e\u0437\u0430\u0442\u0430 \u0437\u0430 \u043a\u0435\u0448\u043e\u0432\u0438\u044f \u043f\u043e\u0442\u043e\u043a (Cash Flow) \u0437\u0430 \u043f\u044a\u0440\u0432\u043e\u0442\u043e \u0442\u0440\u0438\u043c\u0435\u0441\u0435\u0447\u0438\u0435 \u043d\u0430 \u0433\u043e\u0434\u0438\u043d\u0430\u0442\u0430.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T11:26:40.365463+02:00"
+        },
+        {
+          "id": "t_1769742051199",
+          "title": "\u0424\u0438\u043d\u0430\u043d\u0441\u043e\u0432 \u043e\u0434\u0438\u0442 \u043d\u0430 \u043a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u0438\u0432\u043d\u0438 \u0440\u0430\u0437\u0445\u043e\u0434\u0438",
+          "description": "\u0418\u0437\u0433\u043e\u0442\u0432\u044f\u043d\u0435 \u043d\u0430 ROI \u043e\u0434\u0438\u0442 \u0438 \u0431\u044e\u0434\u0436\u0435\u0442\u043d\u0430 \u043f\u0440\u043e\u0433\u043d\u043e\u0437\u0430 \u0437\u0430 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0438 \u0441\u044a\u0433\u043b\u0430\u0441\u043d\u043e Structural Report 25-039-9-EXE. \u0421\u0443\u043c\u0430\u0442\u0430 \u0432\u0435\u0440\u043e\u044f\u0442\u043d\u043e \u043d\u0430\u0434\u0432\u0438\u0448\u0430\u0432\u0430 20,000 BGN.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T05:00:51.199030+02:00"
+        },
+        {
+          "id": "t_1769741420452",
+          "title": "\u0424\u0438\u043d\u0430\u043d\u0441\u043e\u0432 \u043e\u0434\u0438\u0442: \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u043e 0.88 \u0413\u0435\u043e\u043c\u0435\u0442\u0440\u0438\u044f",
+          "description": "\u0418\u0437\u0433\u043e\u0442\u0432\u044f\u043d\u0435 \u043d\u0430 \u0434\u0435\u0442\u0430\u0439\u043b\u0435\u043d ROI \u0430\u043d\u0430\u043b\u0438\u0437 \u0438 \u0431\u044e\u0434\u0436\u0435\u0442 \u0437\u0430 \u0432\u043d\u0435\u0434\u0440\u044f\u0432\u0430\u043d\u0435 \u043d\u0430 \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u043e \u043f\u043e \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0435\u043d \u0434\u043e\u043a\u043b\u0430\u0434 25-039-9-EXE. \u041f\u0440\u0430\u0433 \u043d\u0430 \u043e\u0434\u043e\u0431\u0440\u0435\u043d\u0438\u0435: 20,000 BGN.",
+          "priority": "red",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T04:50:20.452415+02:00"
+        },
+        {
+          "id": "t_1769741146313",
+          "title": "\u0424\u0438\u043d\u0430\u043d\u0441\u043e\u0432 \u0430\u043d\u0430\u043b\u0438\u0437: \u0414\u043e\u043a\u043b\u0430\u0434 25-039-9-EXE",
+          "description": "\u041e\u0446\u0435\u043d\u043a\u0430 \u043d\u0430 \u0440\u0430\u0437\u0445\u043e\u0434\u0438\u0442\u0435 \u0437\u0430 \u0432\u043d\u0435\u0434\u0440\u044f\u0432\u0430\u043d\u0435 \u043d\u0430 \u043d\u043e\u0432\u0438\u0442\u0435 \u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u043d\u0438 \u0438\u0437\u0438\u0441\u043a\u0432\u0430\u043d\u0438\u044f. \u0410\u043a\u043e \u0431\u044e\u0434\u0436\u0435\u0442\u044a\u0442 \u043d\u0430\u0434\u0445\u0432\u044a\u0440\u043b\u0438 20,000 BGN, \u0434\u0430 \u0441\u0435 \u043f\u0440\u0438\u043b\u043e\u0436\u0438 ROI \u0430\u043d\u0430\u043b\u0438\u0437.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-30T04:45:46.313968+02:00"
+        }
+      ]
+    },
+    "antigravity": {
+      "tasks": [
+        {
+          "id": "t_1769861462592",
+          "title": "[ANTIGRAVITY] Audio Feedback on Task Completion",
+          "description": "Implement a sound notification (audio ping) that triggers when a task status changes to 'Done' in the dashboard.",
+          "priority": "orange",
+          "status": "pending",
+          "source": "ai_generated",
+          "created_at": "2026-01-31T14:11:02.592340+02:00"
+        }
+      ]
+    }
+  }
+}
