@@ -1,8 +1,14 @@
 {
     "project_name": "SmartDome OS v5",
     "description": "Hub Model for Intelligent Architecture",
-    "version": "5.1.3",
+    "version": "5.1.5",
     "hapm_core_version": "5.0",
+    "system": {
+        "model_provider": "gemini-3-flash-preview",
+        "default_thread_prefix": "smartdome_clean",
+        "memory_provider": "zep_cloud",
+        "reporting_cycle": "Friday 17:00"
+    },
     "engine_url_var": "VITE_API_URL",
     "last_system_sync": "2026-01-28T22:57:59.287189+02:00",
     "current_project_name": "Project Hvoya (Legacy Transition)",
@@ -103,12 +109,6 @@
             "prompt_file": "directives/smartdome/designer.md"
         }
     ],
-    "system": {
-        "default_thread_prefix": "smartdome_clean",
-        "memory_provider": "zep_cloud",
-        "model_provider": "gemini-3-flash-preview",
-        "reporting_cycle": "Friday 17:00"
-    },
     "participants": [
         {
             "id": "p_valentin",

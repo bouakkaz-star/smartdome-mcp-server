@@ -1,7 +1,7 @@
 {
     "project_name": "SmartDome OS v5",
     "description": "Hub Model for Intelligent Architecture",
-    "version": "5.0.0",
+    "version": "5.2.1",
     "hapm_core_version": "5.0",
     "engine_url_var": "VITE_API_URL",
     "last_system_sync": "2026-01-28T22:57:59.287189+02:00",

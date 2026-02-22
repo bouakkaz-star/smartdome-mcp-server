@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import uvicorn
 from pathlib import Path
@@ -46,7 +47,6 @@ def wait_for_files_active(files):
     print("...all files ready", file=sys.stderr, flush=True)
 
 if __name__ == "__main__":
-    import sys
     sys.path.append(str(Path(__file__).resolve().parent))
 try:
     from utils import time_manager
@@ -60,59 +60,62 @@ GOOGLE_API_KEY = os.getenv("GEMINI_API_KEY")
 ZEP_API_KEY = os.getenv("ZEP_API_KEY")
 
 # DEBUG: Log startup state
-import sys
 print(f"DEBUG_STARTUP: GEMINI_API_KEY exists: {bool(GOOGLE_API_KEY)}", file=sys.stderr, flush=True)
-print(f"DEBUG_STARTUP: Key prefix: {GOOGLE_API_KEY[:10] if GOOGLE_API_KEY else 'NONE'}...", file=sys.stderr, flush=True)
+print(f"DEBUG_STARTUP: ZEP_API_KEY exists: {bool(ZEP_API_KEY)}", file=sys.stderr, flush=True)
 
 # Environment-aware path resolution
-# In cloud container: /app is the root, files are at /app/app/main.py
-# In local dev: files are at .../Personal assistant/apps/server/app/main.py
-_SCRIPT_DIR = Path(__file__).resolve().parent  # /app/app or .../apps/server/app
-_SERVER_ROOT = _SCRIPT_DIR.parent  # /app or .../apps/server
-
-# Check if we're in LOCAL dev (path contains 'Personal assistant')
+_SCRIPT_DIR = Path(__file__).resolve().parent  
+_SERVER_ROOT = _SCRIPT_DIR.parent  
 _IS_LOCAL = "Personal assistant" in str(_SERVER_ROOT)
 
+# PROJECT SELECTION
+PROJECT_ID = os.getenv("HAPM_PROJECT_ID", "smartdome").lower()
+
 if _IS_LOCAL:
-    BASE_DIR = _SERVER_ROOT.parent.parent  # Up to 'Personal assistant'
-    DATA_DIR = BASE_DIR / "apps" / "server" / "data"
-    CONFIG_PATH = BASE_DIR / "hapm_config.json"
-    DIRECTIVES_DIR = BASE_DIR / "directives" / "smartdome"
+    BASE_DIR = _SERVER_ROOT.parent.parent  
+    DATA_DIR = BASE_DIR / "apps" / "server" / "data" / PROJECT_ID
+    PROJECTS_DIR = BASE_DIR / "projects"
+    CONFIG_PATH = PROJECTS_DIR / f"{PROJECT_ID}.json"
+    
+    # If legacy config exists and projects folder is empty, fallback
+    if not CONFIG_PATH.exists():
+        CONFIG_PATH = BASE_DIR / "hapm_config.json"
+        DIRECTIVES_DIR = BASE_DIR / "directives" / "smartdome"
+    else:
+        DIRECTIVES_DIR = BASE_DIR / "directives" / PROJECT_ID
 else:
-    # Cloud container - Read-Only Source at /workspace (or wherever)
+    # Cloud container
     BASE_DIR = _SERVER_ROOT
-    DATA_DIR = Path("/tmp/data")
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    DATA_DIR = Path(f"/tmp/data/{PROJECT_ID}")
+    PROJECTS_DIR = _SCRIPT_DIR / "projects_data" # Mirrored during build
+    CONFIG_PATH = Path(f"/tmp/{PROJECT_ID}.json")
     
-    # Copy config to /tmp to allow writing
     import shutil
-    # Config is now DEPLOYED with the app in the same folder
-    SOURCE_CONFIG = _SCRIPT_DIR / "hapm_config.json"
-    CONFIG_PATH = Path("/tmp/hapm_config.json")
-    
-    # ALWAYS mirror source to /tmp to ensure latest build config is used
+    SOURCE_CONFIG = PROJECTS_DIR / f"{PROJECT_ID}.json"
     if SOURCE_CONFIG.exists():
-        try:
-            shutil.copy(SOURCE_CONFIG, CONFIG_PATH)
-            logging.info(f"Mirrored config to {CONFIG_PATH}")
-        except Exception as e:
-            logging.error(f"Failed to copy config: {e}")
-            if not CONFIG_PATH.exists(): CONFIG_PATH = SOURCE_CONFIG 
+        shutil.copy(SOURCE_CONFIG, CONFIG_PATH)
+    else:
+        # Fallback for old builds
+        SOURCE_CONFIG = _SERVER_ROOT / "hapm_config.json"
+        if SOURCE_CONFIG.exists(): shutil.copy(SOURCE_CONFIG, CONFIG_PATH)
+        CONFIG_PATH = Path("/tmp/hapm_config.json")
 
-    # Deployment Source has 'directives_data' (force copied)
-    DIRECTIVES_DIR = _SCRIPT_DIR / "directives_data" / "smartdome"
+    DIRECTIVES_DIR = _SCRIPT_DIR / "directives_data" / PROJECT_ID
 
-    # BOOTSTRAP DATA (Copy from build source to /tmp/data on first run)
-    import shutil
-    BOOTSTRAP_HISTORY = _SCRIPT_DIR / "chat_history_bootstrap.json"
-    CLOUD_HISTORY = DATA_DIR / "chat_history.json"
-    
-    if BOOTSTRAP_HISTORY.exists() and not CLOUD_HISTORY.exists():
-        try:
-            shutil.copy(BOOTSTRAP_HISTORY, CLOUD_HISTORY)
-            logging.info(f"Bootstrapped chat history to {CLOUD_HISTORY}")
-        except Exception as e:
-            logging.error(f"Bootstrap history failed: {e}")
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+logging.info(f"PROJECT_ID: {PROJECT_ID} | DATA_DIR: {DATA_DIR} | CONFIG: {CONFIG_PATH}")
+
+# BOOTSTRAP DATA (Copy from build source to /tmp/data on first run)
+import shutil
+BOOTSTRAP_HISTORY = _SCRIPT_DIR / "chat_history_bootstrap.json"
+CLOUD_HISTORY = DATA_DIR / "chat_history.json"
+
+if BOOTSTRAP_HISTORY.exists() and not CLOUD_HISTORY.exists():
+    try:
+        shutil.copy(BOOTSTRAP_HISTORY, CLOUD_HISTORY)
+        logging.info(f"Bootstrapped chat history to {CLOUD_HISTORY}")
+    except Exception as e:
+        logging.error(f"Bootstrap history failed: {e}")
 
 TASKS_FILE = DATA_DIR / "director_tasks.json"
 
@@ -122,7 +125,8 @@ HUB_CONFIG = {}
 if CONFIG_PATH.exists():
     try:
         with open(CONFIG_PATH, "r", encoding="utf-8") as f: HUB_CONFIG = json.load(f)
-    except: pass
+    except (json.JSONDecodeError, IOError) as e:
+        logging.error(f"Failed to load config from {CONFIG_PATH}: {e}")
 
 client = None
 if GOOGLE_API_KEY: client = genai.Client(api_key=GOOGLE_API_KEY)
@@ -136,7 +140,8 @@ logging.info(f"Loaded {len(plugin_loader.tools)} skills: {list(plugin_loader.too
 zep = None
 if ZEP_API_KEY: 
     try: zep = Zep(api_key=ZEP_API_KEY)
-    except: pass
+    except Exception as e:
+        logging.error(f"Failed to initialize Zep client: {e}")
 
 app = FastAPI()
 limiter = Limiter(key_func=get_remote_address)
@@ -152,7 +157,6 @@ app.add_middleware(
 
 # --- HELPERS ---
 def log_to_file(msg):
-    import sys
     # Print to stderr for server_final.log capture
     print(f"DEBUG_LOG: {msg}", file=sys.stderr, flush=True)
     try:
@@ -160,11 +164,11 @@ def log_to_file(msg):
         log_path = Path(tempfile.gettempdir()) / "debug_log.txt"
         with open(log_path, "a", encoding="utf-8") as f:
             f.write(f"[{time.strftime('%H:%M:%S')}] {msg}\n")
-    except: pass
+    except IOError:
+        pass  # Log file write failure is non-critical
 
 def upload_to_gemini(file_obj, mime_type="audio/mp3"):
     """Robust global version using /tmp and correcting MIME types."""
-    import sys
     import tempfile
     try:
         log_to_file(f"Starting upload_to_gemini (mime: {mime_type})...")
@@ -206,7 +210,8 @@ def upload_to_gemini(file_obj, mime_type="audio/mp3"):
 
         # Cleanup
         try: os.remove(temp_path)
-        except: pass
+        except OSError:
+            pass  # Temp file cleanup is non-critical
         
         log_to_file(f"Upload Success: {uploaded_file.uri}. Waiting for ACTIVE state...")
         
@@ -323,7 +328,9 @@ class ChatManager:
         try:
             with open(self.filepath, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except: return {"threads": {}}
+        except (json.JSONDecodeError, IOError) as e:
+            logging.error(f"ChatManager failed to load {self.filepath}: {e}")
+            return {"threads": {}}
 
     def save(self, data):
         with open(self.filepath, "w", encoding="utf-8") as f:
@@ -375,7 +382,8 @@ async def get_chat_history(thread_id: str):
         try:
              z_msgs = zep.thread.get(thread_id).messages
              return {"messages": [{"role": m.role, "content": m.content, "created_at": getattr(m, 'created_at', None)} for m in z_msgs]}
-        except: pass
+        except Exception as e:
+            logging.warning(f"Zep history fallback failed for thread {thread_id}: {e}")
         
     return {"messages": []}
 
@@ -410,7 +418,8 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 @app.get("/api/auth/status/{slug}")
-async def check_auth_status(slug: str):
+@limiter.limit("20/minute")
+async def check_auth_status(request: Request, slug: str):
     # Reload config to get latest users
     with open(CONFIG_PATH, "r", encoding="utf-8") as f: config = json.load(f)
     user = next((p for p in config.get("participants", []) if p["slug"] == slug), None)
@@ -429,7 +438,8 @@ async def legacy_verify_link(slug: str):
     return await check_auth_status(slug)
 
 @app.post("/api/auth/setup")
-async def setup_password(slug: str = Form(...), password: str = Form(...)):
+@limiter.limit("5/minute")
+async def setup_password(request: Request, slug: str = Form(...), password: str = Form(...)):
     # 1. Load
     with open(CONFIG_PATH, "r", encoding="utf-8") as f: config = json.load(f)
     
@@ -450,7 +460,8 @@ async def setup_password(slug: str = Form(...), password: str = Form(...)):
     return {"status": "success", "token": f"sd_{secrets.token_hex(8)}", "user": user}
 
 @app.post("/api/auth/login")
-async def login(slug: str = Form(None), user_id: str = Form(None), password: str = Form(...)):
+@limiter.limit("5/minute")
+async def login(request: Request, slug: str = Form(None), user_id: str = Form(None), password: str = Form(...)):
     with open(CONFIG_PATH, "r", encoding="utf-8") as f: config = json.load(f)
     
     # Find user by slug OR id
@@ -665,7 +676,9 @@ class AuditManager:
         try:
             with open(self.filepath, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except: return {"logs": []}
+        except (json.JSONDecodeError, IOError) as e:
+            logging.error(f"AuditManager failed to load {self.filepath}: {e}")
+            return {"logs": []}
 
     def save(self, data):
         with open(self.filepath, "w", encoding="utf-8") as f:
@@ -688,6 +701,74 @@ audit_mgr = AuditManager(AUDIT_FILE)
 @app.get("/api/audit")
 async def get_system_audit():
     return audit_mgr.load() 
+
+@app.get("/api/dashboard/metrics")
+async def get_dashboard_metrics():
+    """Aggregated metrics endpoint for SmartDome OS dashboard."""
+    # 1. Task counts per agent
+    task_data = task_mgr.load()
+    task_summary = {}
+    total_active = 0
+    total_completed = 0
+    for agent_id, agent_data in task_data.get("directors", {}).items():
+        tasks = agent_data.get("tasks", [])
+        pending = sum(1 for t in tasks if t.get("status") == "pending")
+        completed = sum(1 for t in tasks if t.get("status") == "completed")
+        in_progress = sum(1 for t in tasks if t.get("status") == "in_progress")
+        task_summary[agent_id] = {"pending": pending, "completed": completed, "in_progress": in_progress, "total": len(tasks)}
+        total_active += pending + in_progress
+        total_completed += completed
+
+    # 2. Anomalies
+    anom_path = DATA_DIR / "system_anomalies.json"
+    anomalies = []
+    if anom_path.exists():
+        try:
+            with open(anom_path, "r") as f:
+                anomalies = json.load(f).get("anomalies", [])[:10]
+        except (json.JSONDecodeError, IOError) as e:
+            logging.warning(f"Could not load anomalies: {e}")
+
+    # 3. Audit log (recent activity)
+    audit_data = audit_mgr.load()
+    recent_activity = audit_data.get("logs", [])[:10]
+
+    # 4. System info
+    version = HUB_CONFIG.get("version", "5.0.0")
+    hapm_version = HUB_CONFIG.get("hapm_core_version", "5.0")
+    project_name = HUB_CONFIG.get("project_name", "SmartDome")
+    directors_config = HUB_CONFIG.get("directors", [])
+
+    # 5. Development pipeline (real tasks formatted for OS view)
+    pipeline = []
+    for agent_id, agent_data in task_data.get("directors", {}).items():
+        for t in agent_data.get("tasks", []):
+            if t.get("status") in ["pending", "in_progress"]:
+                pipeline.append({
+                    "id": t.get("id", ""),
+                    "title": t.get("title", "Untitled"),
+                    "agent": agent_id.upper(),
+                    "status": t.get("status", "pending"),
+                    "priority": t.get("priority", "green"),
+                    "created_at": t.get("created_at", ""),
+                    "source": t.get("source", "manual"),
+                    "delegated_by": t.get("delegated_by")
+                })
+
+    return {
+        "version": version,
+        "hapm_version": hapm_version,
+        "project_name": project_name,
+        "timestamp": time_manager.get_iso_time(),
+        "tasks": task_summary,
+        "total_active_tasks": total_active,
+        "total_completed_tasks": total_completed,
+        "anomalies": anomalies,
+        "open_anomaly_count": sum(1 for a in anomalies if a.get("status") == "open"),
+        "recent_activity": recent_activity,
+        "pipeline": pipeline[:10],
+        "directors": [{"id": d.get("id"), "name": d.get("name"), "role": d.get("role"), "focus": d.get("focus")} for d in directors_config]
+    }
 
 @app.get("/api/system_logs")
 async def get_system_logs():
@@ -712,8 +793,9 @@ async def get_system_logs():
             with open(log_path, "r", encoding="utf-8") as f:
                 lines = f.readlines()
                 logs.extend(["--- DEBUG LOGS ---"] + lines[-100:][::-1])
-    except Exception: pass
-    
+    except Exception as e:
+        logs.append(f"Could not read debug_log.txt: {str(e)}")
+
     if not logs: logs = ["System init... waiting for logs."]
     
     return {"logs": logs} 
@@ -731,11 +813,10 @@ async def chat_endpoint(
     request: Request,
     text: str = Form(None),
     file: UploadFile = File(None),
-    agent_role: str = Form("ceo"), 
+    agent_role: str = Form("ceo"),
     user_id: str = Form("kamen_architect"),
     thread_id: str = Form("default_smartdome_thread")
 ):
-    import sys
     log_to_file(f"--- NEW REQUEST ---")
     log_to_file(f"/chat HIT. Text: '{text}'. File: {file.filename if file else 'None'}")
     
@@ -802,23 +883,33 @@ async def chat_endpoint(
             file_uri = f_meta
             log_to_file(f"Gemini File ID: {f_meta.name}")
 
-            # WAIT FOR FILE PROCESSING (Improved loop)
+            # WAIT FOR FILE PROCESSING (Exponential Backoff — V5.1 Stabilization)
             log_to_file("Waiting for file processing...")
-            for i in range(20):
-                g_meta = client.files.get(name=f_meta.name)
-                log_to_file(f"Try {i+1}: State = {g_meta.state.name}")
-                if g_meta.state.name == "ACTIVE":
-                    log_to_file("File is ACTIVE and ready.")
-                    break
-                if g_meta.state.name == "FAILED":
-                    log_to_file(f"File processing FAILED: {g_meta.error.message if hasattr(g_meta, 'error') else 'Unknown error'}")
-                    file_uri = None # INVALIDATE FILE
-                    break
-                time.sleep(1.5)
+            max_wait_secs = 120
+            elapsed_wait = 0
+            backoff = 2  # Start at 2s, double each iteration, cap at 10s
+            attempt = 0
+            while elapsed_wait < max_wait_secs:
+                attempt += 1
+                try:
+                    g_meta = client.files.get(name=f_meta.name)
+                    state = g_meta.state.name if hasattr(g_meta.state, 'name') else str(g_meta.state)
+                    log_to_file(f"Poll {attempt}: State={state} (elapsed={elapsed_wait}s)")
+                    if state == "ACTIVE":
+                        log_to_file("File is ACTIVE and ready.")
+                        break
+                    if state == "FAILED":
+                        log_to_file(f"File processing FAILED: {getattr(g_meta, 'error', 'Unknown error')}")
+                        file_uri = None
+                        break
+                except Exception as poll_err:
+                    log_to_file(f"Polling glitch (attempt {attempt}): {poll_err}")
+                time.sleep(backoff)
+                elapsed_wait += backoff
+                backoff = min(backoff * 2, 10)
             else:
-                 # Loop finished without ACTIVE
-                 log_to_file("WARNING: File did not become ACTIVE within timeout.")
-                 file_uri = None
+                log_to_file(f"WARNING: File did not become ACTIVE within {max_wait_secs}s.")
+                file_uri = None
             
             # Cleanup /tmp
             if save_path.exists(): save_path.unlink()
@@ -843,14 +934,9 @@ async def chat_endpoint(
         # CORRECT SDK SYNTAX for v1.x:
         parts.append(types.Part(file_data=types.FileData(file_uri=file_uri.uri, mime_type=file_uri.mime_type)))
 
-    # --- HARDCODED CEO CONTEXT INJECTION (Temporary Fix for Large File Upload) ---
-    ceo_aliases = ["ceo", "valentin", "executive"]
-    if agent_id.lower() in ceo_aliases and not file_uri:
-        log_to_file("CEO Agent Detected: Injecting pre-uploaded PDF report context.")
-        CEO_PDF_URI = "https://generativelanguage.googleapis.com/v1beta/files/0x1fgexz3lrv"
-        parts.insert(0, types.Part(file_data=types.FileData(file_uri=CEO_PDF_URI, mime_type="application/pdf")))
-        base_prompt = "[СИСТЕМНА ИНСТРУКЦИЯ]: ГОВОРИ САМО НА БЪЛГАРСКИ. Прикачен е структурен доклад за анализ.\n" + base_prompt
-    # --- END HARDCODED ---
+    # --- HARDCODED CEO PDF INJECTION REMOVED (V5.1 Stabilization) ---
+    # Previously injected a stale PDF URI for CEO agents, causing 403/context pollution.
+    # CEO agents now operate purely from their directive + user-uploaded files.
 
     original_user_text = text if text else ""
     # Filter out fallback tags for cleaner prompt
@@ -949,7 +1035,18 @@ async def chat_endpoint(
     except Exception as e:
         traceback.print_exc()
         log_to_file(f"CRITICAL ERROR: {e}")
-        return {"status": "error", "response": f"System Error: {str(e)}"}
+        # V5.1: Specific error codes for frontend-actionable feedback
+        err_str = str(e).lower()
+        error_code = "UNKNOWN_ERROR"
+        if "api key" in err_str or "403" in err_str:
+            error_code = "GEMINI_AUTH_FAILURE"
+        elif "timeout" in err_str or "deadline" in err_str:
+            error_code = "REQUEST_TIMEOUT"
+        elif "file" in err_str and ("upload" in err_str or "process" in err_str):
+            error_code = "FILE_UPLOAD_FAILURE"
+        elif "rate" in err_str or "429" in err_str:
+            error_code = "RATE_LIMIT_EXCEEDED"
+        return {"status": "error", "error_code": error_code, "response": f"System Error: {str(e)}"}
 
 
 
