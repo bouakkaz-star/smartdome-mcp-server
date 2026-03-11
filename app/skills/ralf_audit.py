@@ -12,11 +12,15 @@ from datetime import datetime, timedelta
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _SERVER_ROOT = _SCRIPT_DIR.parent.parent
 
+# Read project ID from env (matches main.py logic)
+import os as _os
+_PROJECT_ID = _os.getenv("HAPM_PROJECT_ID", "smartdome").lower()
+
 if "Personal assistant" in str(_SERVER_ROOT):
-    _DATA_DIR = _SERVER_ROOT / "data"
+    _DATA_DIR = _SERVER_ROOT / "data" / _PROJECT_ID
     _DIRECTIVES_DIR = _SERVER_ROOT / "directives" if (_SERVER_ROOT / "directives").exists() else _SERVER_ROOT.parent.parent / "directives" / "smartdome"
 else:
-    _DATA_DIR = Path("/tmp/data")
+    _DATA_DIR = Path(f"/tmp/data/{_PROJECT_ID}")
     _DIRECTIVES_DIR = Path("/app/app/Directives")
 
 

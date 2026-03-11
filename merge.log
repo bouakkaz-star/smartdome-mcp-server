@@ -1,0 +1,6 @@
+Auto-merging app/main.py
+Merge made by the 'ort' strategy.
+ .env                        |   2 +-
+ app/skills/devops_bridge.py | 214 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 215 insertions(+), 1 deletion(-)
+ create mode 100644 app/skills/devops_bridge.py

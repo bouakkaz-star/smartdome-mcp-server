@@ -100,18 +100,21 @@ def guard_output(
         if ralf_mentions:
             violations.append(f"CEO mentioned RALF {len(ralf_mentions)} times — routing violation")
 
-    # 4. CLEAN UP TOOL ARTIFACTS (BUG #3, #4, #8 FIX — v6.1)
-    # Remove [TOOL] blocks, raw JSON, file paths, system logs, CLI errors
+    # 4. CLEAN UP TOOL ARTIFACTS (BUG #3, #4, #8 FIX — v6.1, HOTFIX v6.1.1)
+    # Remove ALL internal tags, raw JSON, file paths, system logs, CLI errors
     tool_patterns = [
         (r'\[TOOL\][\s\S]*?\[/TOOL\]', 'TOOL block'),           # [TOOL]...[/TOOL] blocks
-        (r'\[TOOL\][^\n]*', 'TOOL line'),                         # Single-line [TOOL] output
-        (r'\[SYSTEM_LOG\][^\n]*', 'SYSTEM_LOG'),                  # System log entries
+        (r'\[TOOL\]:?\s*[^\n]*', 'TOOL line'),                   # [TOOL] or [TOOL]: single-line output
+        (r'\[SYSTEM\]:?\s*[^\n]*', 'SYSTEM tag'),                # [SYSTEM]: core tool output
+        (r'\[SYSTEM_LOG\]:?\s*[^\n]*', 'SYSTEM_LOG'),            # System log entries
+        (r'\[DRIVE\]:?\s*[^\n]*', 'DRIVE tag'),                  # [DRIVE]: integration output
+        (r'\[NOTION\]:?\s*[^\n]*', 'NOTION tag'),                # [NOTION]: integration output
         (r'\[DELEGATE_TO:\s*\w+\]', 'DELEGATE marker'),          # Delegation markers
         (r'\[TRANSCRIPT\]:\s*[^\n]*', 'TRANSCRIPT marker'),      # Transcript markers
         (r'```json\s*\{[\s\S]*?\}[\s\S]*?```', 'JSON block'),   # JSON code blocks with tool data
         (r'[A-Z]:\\(?:Users|Windows|Program)[^\n]*', 'Windows path'),  # Windows file paths
         (r'/(?:home|tmp|var|usr|app)/[^\s\n]+', 'Unix path'),    # Unix file paths
-        (r'\{"(?:tool_name|function_call|action|name)"[^\}]*\}', 'tool JSON'),  # Raw tool JSON
+        (r'\{"(?:tool_name|function_call|action|name|success|result|error)"[^\}]*\}', 'tool JSON'),  # Raw tool JSON (expanded keys)
         (r'(?:Error|Exception|Traceback)[^\n]*(?:git|npm|pip|python|ffmpeg)[^\n]*', 'CLI error'),  # CLI errors
         (r'(?:^|\n)\s*File "[^"]+", line \d+[^\n]*', 'Python traceback'),  # Python tracebacks
     ]

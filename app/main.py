@@ -1550,6 +1550,13 @@ async def chat_endpoint(
                 log_to_file(f"Guard: {len(guard_result['violations'])} violations cleaned for {agent_id}: {guard_result['violations'][:3]}")
             final_text = guard_result["text"]
 
+        # 5.6 SAFETY NET — strip any remaining internal tags (v6.1.1)
+        _internal_tag_re = re.compile(r'\[(TOOL|SYSTEM|SYSTEM_LOG|DRIVE|NOTION|DELEGATE_TO:\s*\w+)\]:?\s*[^\n]*', re.IGNORECASE)
+        if _internal_tag_re.search(final_text):
+            log_to_file(f"SafetyNet: stripping leaked internal tags for {agent_id}")
+            final_text = _internal_tag_re.sub('', final_text)
+            final_text = re.sub(r'\n{3,}', '\n\n', final_text).strip()
+
         # --- Extract transcript from audio responses ---
         transcript = None
         if file_received and mime.startswith("audio") and "[TRANSCRIPT]:" in final_text:
