@@ -364,6 +364,7 @@ class ChatManager:
     def __init__(self, filepath, zep_client=None):
         self.filepath = filepath
         self.zep_client = zep_client
+        self._ensured_threads = set()  # Track which threads have been created
         self.ensure_file()
 
     def ensure_file(self):
@@ -384,6 +385,23 @@ class ChatManager:
         with open(self.filepath, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
 
+    def _ensure_thread(self, thread_id):
+        """Create Zep thread if it doesn't exist yet (idempotent)."""
+        if thread_id in self._ensured_threads:
+            return
+        if self.zep_client:
+            try:
+                self.zep_client.thread.get(thread_id=thread_id)
+            except Exception:
+                try:
+                    self.zep_client.thread.create(thread_id=thread_id)
+                    logging.info(f"Zep thread created: {thread_id}")
+                except Exception as e2:
+                    # Thread might already exist (race condition) — that's fine
+                    if "already exists" not in str(e2).lower():
+                        logging.warning(f"Zep thread create failed for {thread_id}: {e2}")
+            self._ensured_threads.add(thread_id)
+
     def add_message(self, thread_id, role, content, agent_role=None):
         """Save message to BOTH Zep (primary) and local JSON (cache)."""
         timestamp = time_manager.get_iso_time()
@@ -392,10 +410,12 @@ class ChatManager:
         # Uses zep-cloud 3.13 SDK: thread.add_messages (NOT memory.add)
         if self.zep_client:
             try:
+                self._ensure_thread(thread_id)
                 zep_role = "assistant" if role == "assistant" else "user"
+                metadata = {"agent_role": agent_role, "backend_timestamp": timestamp}
                 self.zep_client.thread.add_messages(
                     thread_id=thread_id,
-                    messages=[Message(role=zep_role, content=content)]
+                    messages=[Message(role=zep_role, content=content, metadata=metadata)]
                 )
             except Exception as e:
                 logging.warning(f"Zep save failed for {thread_id}: {e}")
@@ -421,23 +441,32 @@ class ChatManager:
     def get_history(self, thread_id, limit=100):
         """
         Load history: Try Zep first (persistent), fall back to local JSON.
-        Returns list of message dicts with role, content, created_at, agent_role.
+        Returns list of message dicts with role, content, created_at, agent_role, metadata.
         """
         # 1. Try Zep Cloud FIRST (has full history, survives restarts)
         # Uses zep-cloud 3.13 SDK: thread.get_history (NOT memory.get)
         if self.zep_client:
             try:
+                self._ensure_thread(thread_id)
                 history = self.zep_client.thread.get_history(thread_id=thread_id, limit=limit)
                 if history and history.messages:
-                    return [
-                        {
+                    results = []
+                    for m in history.messages:
+                        meta = {}
+                        if hasattr(m, 'metadata') and m.metadata:
+                            meta = m.metadata if isinstance(m.metadata, dict) else {}
+                        created = getattr(m, 'created_at', None)
+                        # Convert datetime to ISO string if needed
+                        if created and hasattr(created, 'isoformat'):
+                            created = created.isoformat()
+                        results.append({
                             "role": m.role,
                             "content": m.content,
-                            "created_at": getattr(m, 'created_at', None),
-                            "agent_role": getattr(m, 'metadata', {}).get('agent_role') if hasattr(m, 'metadata') else None
-                        }
-                        for m in history.messages
-                    ]
+                            "created_at": created or meta.get("backend_timestamp"),
+                            "agent_role": meta.get("agent_role"),
+                            "metadata": meta,
+                        })
+                    return results
             except Exception as e:
                 logging.warning(f"Zep history load failed for {thread_id}: {e}, falling back to local")
 
