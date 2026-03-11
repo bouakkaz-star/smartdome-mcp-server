@@ -147,7 +147,25 @@ else:
         DIRECTIVES_DIR = _SERVER_ROOT / "directives" / "smartdome"
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
-logging.info(f"PROJECT_ID: {PROJECT_ID} | DATA_DIR: {DATA_DIR} | CONFIG: {CONFIG_PATH}")
+
+# --- Cloud Run Environment Detection ---
+IS_CLOUD_RUN = os.getenv("K_SERVICE") is not None or os.getenv("CLOUD_RUN_JOB") is not None
+
+# --- Ensure critical data files exist (prevents RALF false alarms) ---
+_REQUIRED_DATA_FILES = {
+    "chat_history.json": {"threads": {}},
+    "director_tasks.json": {"directors": {}},
+    "audit_log.json": {"logs": []},
+    "system_anomalies.json": {"anomalies": []},
+}
+for fname, default_data in _REQUIRED_DATA_FILES.items():
+    fpath = DATA_DIR / fname
+    if not fpath.exists():
+        with open(fpath, "w", encoding="utf-8") as f:
+            json.dump(default_data, f, indent=2)
+        logging.info(f"Created missing data file: {fpath}")
+
+logging.info(f"PROJECT_ID: {PROJECT_ID} | DATA_DIR: {DATA_DIR} | CONFIG: {CONFIG_PATH} | CLOUD_RUN: {IS_CLOUD_RUN}")
 
 # BOOTSTRAP DATA (Copy from build source to /tmp/data on first run)
 import shutil
@@ -371,12 +389,13 @@ class ChatManager:
         timestamp = time_manager.get_iso_time()
 
         # 1. Save to Zep Cloud (PRIMARY — persistent)
+        # Uses zep-cloud 3.13 SDK: thread.add_messages (NOT memory.add)
         if self.zep_client:
             try:
                 zep_role = "assistant" if role == "assistant" else "user"
-                self.zep_client.memory.add(
-                    session_id=thread_id,
-                    messages=[Message(role=zep_role, content=content, role_type=zep_role)]
+                self.zep_client.thread.add_messages(
+                    thread_id=thread_id,
+                    messages=[Message(role=zep_role, content=content)]
                 )
             except Exception as e:
                 logging.warning(f"Zep save failed for {thread_id}: {e}")
@@ -405,10 +424,11 @@ class ChatManager:
         Returns list of message dicts with role, content, created_at, agent_role.
         """
         # 1. Try Zep Cloud FIRST (has full history, survives restarts)
+        # Uses zep-cloud 3.13 SDK: thread.get_history (NOT memory.get)
         if self.zep_client:
             try:
-                memory = self.zep_client.memory.get(session_id=thread_id, memory_type="perpetual")
-                if memory and memory.messages:
+                history = self.zep_client.thread.get_history(thread_id=thread_id, limit=limit)
+                if history and history.messages:
                     return [
                         {
                             "role": m.role,
@@ -416,7 +436,7 @@ class ChatManager:
                             "created_at": getattr(m, 'created_at', None),
                             "agent_role": getattr(m, 'metadata', {}).get('agent_role') if hasattr(m, 'metadata') else None
                         }
-                        for m in memory.messages[-limit:]
+                        for m in history.messages
                     ]
             except Exception as e:
                 logging.warning(f"Zep history load failed for {thread_id}: {e}, falling back to local")
@@ -1085,13 +1105,28 @@ async def get_dashboard_metrics():
         total_active += pending + in_progress
         total_completed += completed
 
-    # 2. Anomalies
+    # 2. Anomalies (filter Cloud Run false positives)
     anom_path = DATA_DIR / "system_anomalies.json"
     anomalies = []
     if anom_path.exists():
         try:
             with open(anom_path, "r") as f:
-                anomalies = json.load(f).get("anomalies", [])[:10]
+                raw_anomalies = json.load(f).get("anomalies", [])[:20]
+            # Suppress known Cloud Run false alarms
+            CLOUD_RUN_FALSE_ALARMS = [
+                "git command not found",
+                "git' is not recognized",
+                "system files (audit_log.json",
+                "system files are missing",
+                "chat_history.json) are missing",
+            ]
+            if IS_CLOUD_RUN:
+                anomalies = [
+                    a for a in raw_anomalies
+                    if not any(fa in a.get("description", "").lower() for fa in [s.lower() for s in CLOUD_RUN_FALSE_ALARMS])
+                ][:10]
+            else:
+                anomalies = raw_anomalies[:10]
         except (json.JSONDecodeError, IOError) as e:
             logging.warning(f"Could not load anomalies: {e}")
 
