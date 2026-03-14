@@ -23,11 +23,14 @@ def get_notion_config():
     """Dynamically fetch Notion config from environment."""
     return os.getenv("NOTION_API_KEY"), os.getenv("NOTION_DATABASE_ID")
 
-HEADERS = {
-    "Authorization": f"Bearer {os.getenv('NOTION_API_KEY')}",
-    "Content-Type": "application/json",
-    "Notion-Version": "2022-06-28",
-}
+# HEADERS is now generated dynamically in each function to ensure live credentials are used.
+def _get_headers():
+    key, _ = get_notion_config()
+    return {
+        "Authorization": f"Bearer {key}",
+        "Content-Type": "application/json",
+        "Notion-Version": "2022-06-28",
+    }
 
 # --- Helpers ---
 def _check_config():
@@ -153,7 +156,7 @@ async def create_notion_task(
 
     async with httpx.AsyncClient(timeout=15) as client:
         key, db_id = get_notion_config()
-        headers = {**HEADERS, "Authorization": f"Bearer {key}"}
+        headers = _get_headers()
         try:
             resp = await client.post("https://api.notion.com/v1/pages", json=payload, headers=headers)
             if resp.status_code == 200:
@@ -224,7 +227,7 @@ async def query_notion_tasks(
 
     async with httpx.AsyncClient(timeout=15) as client:
         key, db_id = get_notion_config()
-        headers = {**HEADERS, "Authorization": f"Bearer {key}"}
+        headers = _get_headers()
         try:
             resp = await client.post(
                 f"https://api.notion.com/v1/databases/{db_id}/query",
@@ -284,11 +287,12 @@ async def update_notion_task(
         return {"success": False, "error": "No fields to update"}
 
     async with httpx.AsyncClient(timeout=15) as client:
+        headers = _get_headers()
         try:
             resp = await client.patch(
                 f"https://api.notion.com/v1/pages/{task_id}",
                 json={"properties": properties},
-                headers=HEADERS,
+                headers=headers,
             )
             if resp.status_code == 200:
                 logging.info(f"NOTION: Updated task {task_id}")
