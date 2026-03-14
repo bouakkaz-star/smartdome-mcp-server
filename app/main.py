@@ -2,7 +2,6 @@ import os
 import sys
 import json
 import uvicorn
-import subprocess
 from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI, UploadFile, File, Form, Query, HTTPException, Request, Header
@@ -46,6 +45,64 @@ try:
 except ImportError:
     from app.Core.plugin_loader import PluginLoader
 
+# --- INTEGRATION TOOLS (Drive & Notion) ---
+try:
+    from tools.drive_tool import drive_list_files, drive_search, drive_upload_file, drive_get_file_content, drive_create_folder
+    from tools.notion_tool import (
+        create_notion_task, query_notion_tasks, update_notion_task,
+        gtd_capture, gtd_get_next_actions, gtd_promote_to_next, gtd_complete_task,
+    )
+    from tools.agent_bus import send_agent_message, get_agent_messages, get_agent_routing_info
+    from tools.output_guard import guard_output
+    from tools.context_injector import inject_context
+    from tools.inbox_tool import process_inbox_file, classify_file
+    INTEGRATION_TOOLS_LOADED = True
+except ImportError:
+    try:
+        from app.tools.drive_tool import drive_list_files, drive_search, drive_upload_file, drive_get_file_content, drive_create_folder
+        from app.tools.notion_tool import (
+            create_notion_task, query_notion_tasks, update_notion_task,
+            gtd_capture, gtd_get_next_actions, gtd_promote_to_next, gtd_complete_task,
+        )
+        from app.tools.agent_bus import send_agent_message, get_agent_messages, get_agent_routing_info
+        from app.tools.output_guard import guard_output
+        from app.tools.context_injector import inject_context
+        from app.tools.inbox_tool import process_inbox_file, classify_file
+        INTEGRATION_TOOLS_LOADED = True
+    except ImportError as e:
+        logging.warning(f"Integration tools not loaded: {e}")
+        INTEGRATION_TOOLS_LOADED = False
+
+def reload_notion_tools():
+    """Forcibly reload Notion tools to ensure env vars are detected."""
+    global INTEGRATION_TOOLS_LOADED, create_notion_task, query_notion_tasks, update_notion_task, gtd_capture, gtd_get_next_actions, gtd_promote_to_next, gtd_complete_task
+    try:
+        import importlib
+        try:
+            import tools.notion_tool as nt
+        except ImportError:
+            import app.tools.notion_tool as nt
+        importlib.reload(nt)
+        create_notion_task = nt.create_notion_task
+        query_notion_tasks = nt.query_notion_tasks
+        update_notion_task = nt.update_notion_task
+        gtd_capture = nt.gtd_capture
+        gtd_get_next_actions = nt.gtd_get_next_actions
+        gtd_promote_to_next = nt.gtd_promote_to_next
+        gtd_complete_task = nt.gtd_complete_task
+        
+        # Check if actually configured
+        err = nt._check_config()
+        if err:
+            logging.warning(f"Notion check failed after reload: {err}")
+            INTEGRATION_TOOLS_LOADED = False
+        else:
+            logging.info("Notion tools reloaded and verified.")
+            INTEGRATION_TOOLS_LOADED = True
+    except Exception as e:
+        logging.error(f"Failed to reload Notion tools: {e}")
+        INTEGRATION_TOOLS_LOADED = False
+
 # --- UTILS ---
 def wait_for_files_active(files):
     """Waits for the given files to be active.
@@ -83,6 +140,11 @@ ZEP_API_KEY = os.getenv("ZEP_API_KEY")
 # DEBUG: Log startup state
 print(f"DEBUG_STARTUP: GEMINI_API_KEY exists: {bool(GOOGLE_API_KEY)}", file=sys.stderr, flush=True)
 print(f"DEBUG_STARTUP: ZEP_API_KEY exists: {bool(ZEP_API_KEY)}", file=sys.stderr, flush=True)
+print(f"DEBUG_STARTUP: NOTION_API_KEY exists: {bool(os.getenv('NOTION_API_KEY'))}", file=sys.stderr, flush=True)
+
+# Forcibly reload Notion tools in Cloud Run to catch env vars
+if IS_CLOUD_RUN or True: # Force for now to be safe
+    reload_notion_tools()
 
 _IS_LOCAL = "Personal assistant" in str(_SERVER_ROOT)
 
@@ -120,7 +182,25 @@ else:
         DIRECTIVES_DIR = _SERVER_ROOT / "directives" / "smartdome"
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
-logging.info(f"PROJECT_ID: {PROJECT_ID} | DATA_DIR: {DATA_DIR} | CONFIG: {CONFIG_PATH}")
+
+# --- Cloud Run Environment Detection ---
+IS_CLOUD_RUN = os.getenv("K_SERVICE") is not None or os.getenv("CLOUD_RUN_JOB") is not None
+
+# --- Ensure critical data files exist (prevents RALF false alarms) ---
+_REQUIRED_DATA_FILES = {
+    "chat_history.json": {"threads": {}},
+    "director_tasks.json": {"directors": {}},
+    "audit_log.json": {"logs": []},
+    "system_anomalies.json": {"anomalies": []},
+}
+for fname, default_data in _REQUIRED_DATA_FILES.items():
+    fpath = DATA_DIR / fname
+    if not fpath.exists():
+        with open(fpath, "w", encoding="utf-8") as f:
+            json.dump(default_data, f, indent=2)
+        logging.info(f"Created missing data file: {fpath}")
+
+logging.info(f"PROJECT_ID: {PROJECT_ID} | DATA_DIR: {DATA_DIR} | CONFIG: {CONFIG_PATH} | CLOUD_RUN: {IS_CLOUD_RUN}")
 
 # BOOTSTRAP DATA (Copy from build source to /tmp/data on first run)
 import shutil
@@ -196,6 +276,26 @@ def log_to_file(msg):
             f.write(f"[{time.strftime('%H:%M:%S')}] {msg}\n")
     except IOError:
         pass  # Log file write failure is non-critical
+
+import subprocess
+
+def convert_webm_to_wav(input_path: str) -> str:
+    """Convert WebM audio to WAV using ffmpeg. Returns path to WAV file."""
+    output_path = input_path.rsplit('.', 1)[0] + ".wav"
+    try:
+        result = subprocess.run(
+            ["ffmpeg", "-y", "-i", str(input_path), "-ar", "16000", "-ac", "1", "-f", "wav", str(output_path)],
+            capture_output=True, text=True, timeout=30
+        )
+        if result.returncode == 0:
+            log_to_file(f"Converted {input_path} → {output_path}")
+            return output_path
+        else:
+            log_to_file(f"ffmpeg conversion failed: {result.stderr}")
+            return None
+    except Exception as e:
+        log_to_file(f"ffmpeg error: {e}")
+        return None
 
 def upload_to_gemini(file_obj, mime_type="audio/mp3"):
     """Robust global version using /tmp and correcting MIME types."""
@@ -279,26 +379,6 @@ def upload_to_gemini(file_obj, mime_type="audio/mp3"):
         log_to_file(f"Upload Error: {e}")
         return None
 
-def convert_webm_to_wav(input_path: str) -> str:
-    """Convert WebM audio to WAV using ffmpeg. Returns path to WAV file."""
-    output_path = input_path.replace(".webm", ".wav").replace(".tmp", ".wav")
-    if not output_path.endswith(".wav"):
-        output_path += ".wav"
-    try:
-        result = subprocess.run(
-            ["ffmpeg", "-i", str(input_path), "-ar", "16000", "-ac", "1", "-f", "wav", str(output_path)],
-            capture_output=True, text=True, timeout=30
-        )
-        if result.returncode == 0:
-            log_to_file(f"Converted {input_path} → {output_path}")
-            return output_path
-        else:
-            log_to_file(f"ffmpeg conversion failed: {result.stderr}")
-            return None
-    except Exception as e:
-        log_to_file(f"ffmpeg error: {e}")
-        return None
-
 # --- ENDPOINTS ---
 # --- TASK ENGINE v6 (modular) ---
 task_mgr = TaskEngine(TASKS_FILE, time_manager=time_manager)
@@ -306,12 +386,20 @@ init_engine(task_mgr)
 init_anomaly_path(DATA_DIR)
 init_reminder(task_mgr)
 logging.info(f"TaskEngine v6 initialized: {TASKS_FILE}")
-# --- CHAT MANAGER ---
+# --- CHAT MANAGER (v6.1 — Zep Primary, Local Cache Fallback) ---
 CHAT_HISTORY_FILE = DATA_DIR / "chat_history.json"
 
 class ChatManager:
-    def __init__(self, filepath):
+    """
+    Hybrid Chat Storage:
+    - PRIMARY: Zep Cloud (persistent, survives Cloud Run restarts)
+    - FALLBACK: Local JSON (fast cache, ephemeral)
+    Messages are saved to BOTH. History is loaded from Zep first.
+    """
+    def __init__(self, filepath, zep_client=None):
         self.filepath = filepath
+        self.zep_client = zep_client
+        self._ensured_threads = set()  # Track which threads have been created
         self.ensure_file()
 
     def ensure_file(self):
@@ -332,27 +420,97 @@ class ChatManager:
         with open(self.filepath, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
 
-    def add_message(self, thread_id, role, content):
+    def _ensure_thread(self, thread_id):
+        """Create Zep thread if it doesn't exist yet (idempotent)."""
+        if thread_id in self._ensured_threads:
+            return
+        if self.zep_client:
+            try:
+                self.zep_client.thread.get(thread_id=thread_id)
+            except Exception:
+                try:
+                    self.zep_client.thread.create(thread_id=thread_id)
+                    logging.info(f"Zep thread created: {thread_id}")
+                except Exception as e2:
+                    # Thread might already exist (race condition) — that's fine
+                    if "already exists" not in str(e2).lower():
+                        logging.warning(f"Zep thread create failed for {thread_id}: {e2}")
+            self._ensured_threads.add(thread_id)
+
+    def add_message(self, thread_id, role, content, agent_role=None):
+        """Save message to BOTH Zep (primary) and local JSON (cache)."""
+        timestamp = time_manager.get_iso_time()
+
+        # 1. Save to Zep Cloud (PRIMARY — persistent)
+        # Uses zep-cloud 3.13 SDK: thread.add_messages (NOT memory.add)
+        if self.zep_client:
+            try:
+                self._ensure_thread(thread_id)
+                zep_role = "assistant" if role == "assistant" else "user"
+                metadata = {"agent_role": agent_role, "backend_timestamp": timestamp}
+                self.zep_client.thread.add_messages(
+                    thread_id=thread_id,
+                    messages=[Message(role=zep_role, content=content, metadata=metadata)]
+                )
+            except Exception as e:
+                logging.warning(f"Zep save failed for {thread_id}: {e}")
+
+        # 2. Save to local JSON (CACHE — fast fallback)
         data = self.load()
         if thread_id not in data["threads"]:
             data["threads"][thread_id] = []
-        
+
         msg = {
             "role": role,
             "content": content,
-            "created_at": time_manager.get_iso_time()
+            "created_at": timestamp,
+            "agent_role": agent_role  # BUG #2 FIX: Store which director sent it
         }
         data["threads"][thread_id].append(msg)
-        if len(data["threads"][thread_id]) > 300:
-            data["threads"][thread_id] = data["threads"][thread_id][-300:]
-            
-        self.save(data)
-    
-    def get_history(self, thread_id):
-        data = self.load()
-        return data["threads"].get(thread_id, [])
+        # Keep local cache at 1000 messages (increased from 300)
+        if len(data["threads"][thread_id]) > 1000:
+            data["threads"][thread_id] = data["threads"][thread_id][-1000:]
 
-chat_mgr = ChatManager(CHAT_HISTORY_FILE)
+        self.save(data)
+
+    def get_history(self, thread_id, limit=100):
+        """
+        Load history: Try Zep first (persistent), fall back to local JSON.
+        Returns list of message dicts with role, content, created_at, agent_role, metadata.
+        """
+        # 1. Try Zep Cloud FIRST (has full history, survives restarts)
+        # Uses zep-cloud 3.13 SDK: thread.get_history (NOT memory.get)
+        if self.zep_client:
+            try:
+                self._ensure_thread(thread_id)
+                history = self.zep_client.thread.get_history(thread_id=thread_id, limit=limit)
+                if history and history.messages:
+                    results = []
+                    for m in history.messages:
+                        meta = {}
+                        if hasattr(m, 'metadata') and m.metadata:
+                            meta = m.metadata if isinstance(m.metadata, dict) else {}
+                        created = getattr(m, 'created_at', None)
+                        # Convert datetime to ISO string if needed
+                        if created and hasattr(created, 'isoformat'):
+                            created = created.isoformat()
+                        results.append({
+                            "role": m.role,
+                            "content": m.content,
+                            "created_at": created or meta.get("backend_timestamp"),
+                            "agent_role": meta.get("agent_role"),
+                            "metadata": meta,
+                        })
+                    return results
+            except Exception as e:
+                logging.warning(f"Zep history load failed for {thread_id}: {e}, falling back to local")
+
+        # 2. Fallback to local JSON
+        data = self.load()
+        msgs = data["threads"].get(thread_id, [])
+        return msgs[-limit:] if msgs else []
+
+chat_mgr = ChatManager(CHAT_HISTORY_FILE, zep_client=zep)
 
 # --- ENDPOINTS ---
 @app.get("/api/config")
@@ -367,21 +525,13 @@ async def get_status():
     }
 
 @app.get("/api/history/{thread_id}")
-async def get_chat_history(thread_id: str):
-    # Hybrid: Try Local first (faster/reliable)
-    local_msgs = chat_mgr.get_history(thread_id)
-    if local_msgs:
-        return {"messages": local_msgs}
-    
-    # Fallback to Zep (Legacy)
-    if zep:
-        try:
-             z_msgs = zep.thread.get(thread_id).messages
-             return {"messages": [{"role": m.role, "content": m.content, "created_at": getattr(m, 'created_at', None)} for m in z_msgs]}
-        except Exception as e:
-            logging.warning(f"Zep history fallback failed for thread {thread_id}: {e}")
-        
-    return {"messages": []}
+async def get_chat_history(thread_id: str, limit: int = Query(100, ge=1, le=500)):
+    """
+    v6.1: Zep-primary history with pagination support.
+    Zep is checked first (persistent). Local JSON is fallback (cache).
+    """
+    messages = chat_mgr.get_history(thread_id, limit=limit)
+    return {"messages": messages, "count": len(messages), "has_more": len(messages) >= limit}
 
 @app.get("/api/debug/system")
 async def debug_system():
@@ -652,6 +802,246 @@ async def get_upcoming_tasks_api(days: int = 3):
     upcoming = task_mgr.get_due_soon(days=days)
     return {"upcoming": upcoming, "count": len(upcoming)}
 
+# =====================================================================
+# NOTION TASK BOARD (v7 — Interactive Dashboard)
+# =====================================================================
+
+@app.get("/api/notion/tasks")
+async def get_notion_tasks(
+    status: str = None,
+    priority: str = None,
+    agent_id: str = None,
+    project_name: str = None,
+    max_results: int = 50,
+):
+    """
+    Fetch tasks from Notion database for the interactive Task Board.
+    Enriches each task with deadline_status (overdue, due_soon, on_track, no_date).
+    """
+    if not INTEGRATION_TOOLS_LOADED:
+        return {"success": False, "error": "Notion integration not loaded"}
+
+    try:
+        result = await query_notion_tasks(
+            status=status,
+            priority=priority,
+            agent_id=agent_id,
+            project_name=project_name,
+            max_results=max_results,
+        )
+
+        if not result.get("success"):
+            return result
+
+        # Enrich tasks with deadline awareness
+        from datetime import datetime as dt
+        today = dt.now().date()
+        enriched_tasks = []
+        for task in result.get("tasks", []):
+            due = task.get("due_date")
+            if due:
+                try:
+                    due_date = dt.strptime(due, "%Y-%m-%d").date()
+                    days_until = (due_date - today).days
+                    if days_until < 0:
+                        task["deadline_status"] = "overdue"
+                        task["days_remaining"] = days_until
+                    elif days_until <= 2:
+                        task["deadline_status"] = "due_soon"
+                        task["days_remaining"] = days_until
+                    else:
+                        task["deadline_status"] = "on_track"
+                        task["days_remaining"] = days_until
+                except (ValueError, TypeError):
+                    task["deadline_status"] = "no_date"
+                    task["days_remaining"] = None
+            else:
+                task["deadline_status"] = "no_date"
+                task["days_remaining"] = None
+            enriched_tasks.append(task)
+
+        # Sort: overdue first, then due_soon, then on_track, then no_date
+        status_order = {"overdue": 0, "due_soon": 1, "on_track": 2, "no_date": 3}
+        enriched_tasks.sort(key=lambda t: (status_order.get(t["deadline_status"], 3), t.get("days_remaining") or 999))
+
+        return {
+            "success": True,
+            "count": len(enriched_tasks),
+            "tasks": enriched_tasks,
+        }
+    except Exception as e:
+        log_to_file(f"Notion tasks endpoint error: {e}")
+        return {"success": False, "error": str(e)}
+
+
+@app.post("/api/notion/tasks/{task_id}/voice-context")
+async def voice_context_for_task(
+    task_id: str,
+    text: str = Form(None),
+    file: UploadFile = File(None),
+    user_id: str = Form("p_valentin"),
+):
+    """
+    Voice-to-task: user speaks to a specific task.
+    The audio + task context are sent to the CEO agent for processing.
+    The CEO agent can then update the task in Notion based on the voice input.
+    """
+    if not INTEGRATION_TOOLS_LOADED:
+        return {"success": False, "error": "Integration tools not loaded"}
+
+    # 1. Fetch the specific task from Notion for context
+    try:
+        import httpx
+        notion_key = os.getenv("NOTION_API_KEY")
+        if not notion_key:
+            return {"success": False, "error": "Notion API key not configured"}
+
+        async with httpx.AsyncClient(timeout=10) as client:
+            resp = await client.get(
+                f"https://api.notion.com/v1/pages/{task_id}",
+                headers={
+                    "Authorization": f"Bearer {notion_key}",
+                    "Notion-Version": "2022-06-28",
+                },
+            )
+            if resp.status_code != 200:
+                task_context = f"[Task ID: {task_id} — could not fetch details]"
+            else:
+                page = resp.json()
+                props = page.get("properties", {})
+                # Extract key fields
+                task_title = ""
+                title_prop = props.get("Task name", {})
+                if title_prop.get("title"):
+                    task_title = "".join(t.get("plain_text", "") for t in title_prop["title"])
+                task_status = props.get("Status", {}).get("status", {}).get("name", "Unknown")
+                task_priority = props.get("Priority", {}).get("select", {}).get("name", "Unknown") if props.get("Priority", {}).get("select") else "None"
+                task_due = props.get("Due Date", {}).get("date", {}).get("start", "No date") if props.get("Due Date", {}).get("date") else "No date"
+
+                task_context = f"TASK CONTEXT:\n- Title: {task_title}\n- Status: {task_status}\n- Priority: {task_priority}\n- Due: {task_due}\n- Notion ID: {task_id}"
+    except Exception as e:
+        task_context = f"[Task ID: {task_id} — error fetching: {e}]"
+
+    # 2. Prepend task context to the user's text and forward to the CEO chat endpoint
+    augmented_text = f"{task_context}\n\nUSER VOICE CONTEXT: {text or '[Audio attached — transcribe first]'}\n\nINSTRUCTION: Based on the voice input, decide if you should update the task's priority, deadline, status, or add notes. Use update_notion_task tool if changes are needed. Explain what you changed to the user."
+
+    # Create a new form for the chat endpoint
+    from starlette.datastructures import UploadFile as StarletteUpload
+    from fastapi import Request as FastRequest
+
+    # Forward to the main chat endpoint logic
+    # We'll use an internal redirect approach: call the chat function directly
+    log_to_file(f"Voice-to-task: task_id={task_id}, user_id={user_id}, has_audio={file is not None}")
+
+    # Build a synthetic request to the chat endpoint
+    form_data = {
+        "text": augmented_text,
+        "agent_role": "ceo",
+        "user_id": user_id,
+        "thread_id": f"task_{task_id}",
+    }
+
+    # For simplicity, use internal imports and call the same logic
+    # But we can't easily forward file uploads internally. Instead, let the frontend
+    # call /chat directly with the augmented text + file.
+    return {
+        "success": True,
+        "augmented_text": augmented_text,
+        "task_context": task_context,
+        "instruction": "Frontend should call /chat with this augmented_text + audio file, agent_role=ceo"
+    }
+
+
+# =====================================================================
+# DRIVE INBOX — AI File Classification & Routing
+# =====================================================================
+
+@app.post("/api/inbox")
+async def inbox_upload(
+    file: UploadFile = File(...),
+    project_hint: str = Form(None),
+    uploader: str = Form("kamen"),
+    auto_upload_drive: bool = Form(True),
+    auto_create_task: bool = Form(True),
+):
+    """
+    Drive Inbox: Upload → AI Classify → Route to Drive → Create Notion Task.
+
+    Accepts a file upload, classifies it with Gemini Flash, uploads to the
+    correct Google Drive project/department folder, and creates a Notion task
+    for the responsible agent.
+    """
+    if not INTEGRATION_TOOLS_LOADED:
+        raise HTTPException(status_code=503, detail="Integration tools not loaded — Drive/Notion unavailable")
+
+    try:
+        file_bytes = await file.read()
+        filename = file.filename or "unnamed_file"
+        mime_type = file.content_type or "application/octet-stream"
+
+        log_to_file(f"INBOX: Received '{filename}' ({mime_type}, {len(file_bytes)} bytes) from {uploader}")
+
+        # Run the full pipeline: classify → drive upload → notion task
+        result = await process_inbox_file(
+            file_bytes=file_bytes,
+            filename=filename,
+            mime_type=mime_type,
+            uploader=uploader,
+            project_hint=project_hint,
+            auto_upload_drive=auto_upload_drive,
+            auto_create_task=auto_create_task,
+        )
+
+        log_to_file(f"INBOX: Pipeline complete for '{filename}' → {result.get('summary', 'no summary')}")
+
+        return {
+            "success": True,
+            **result,
+        }
+
+    except Exception as e:
+        logging.error(f"INBOX ERROR: {e}\n{traceback.format_exc()}")
+        log_to_file(f"INBOX ERROR: {filename} → {e}")
+        raise HTTPException(status_code=500, detail=f"Inbox processing failed: {str(e)}")
+
+
+@app.post("/api/inbox/classify-only")
+async def inbox_classify_only(
+    file: UploadFile = File(...),
+    project_hint: str = Form(None),
+):
+    """
+    Classify a file WITHOUT uploading to Drive or creating a task.
+    Returns the AI classification for preview/confirmation before routing.
+    """
+    if not INTEGRATION_TOOLS_LOADED:
+        raise HTTPException(status_code=503, detail="Integration tools not loaded")
+
+    try:
+        file_bytes = await file.read()
+        filename = file.filename or "unnamed_file"
+        mime_type = file.content_type or "application/octet-stream"
+
+        classification = await classify_file(
+            file_bytes=file_bytes,
+            filename=filename,
+            mime_type=mime_type,
+            project_hint=project_hint,
+        )
+
+        return {
+            "success": True,
+            "classification": classification,
+            "filename": filename,
+            "mime_type": mime_type,
+            "size_bytes": len(file_bytes),
+        }
+
+    except Exception as e:
+        logging.error(f"INBOX CLASSIFY ERROR: {e}")
+        raise HTTPException(status_code=500, detail=f"Classification failed: {str(e)}")
+
+
 @app.get("/api/calendar")
 async def get_calendar_data():
     """
@@ -779,13 +1169,28 @@ async def get_dashboard_metrics():
         total_active += pending + in_progress
         total_completed += completed
 
-    # 2. Anomalies
+    # 2. Anomalies (filter Cloud Run false positives)
     anom_path = DATA_DIR / "system_anomalies.json"
     anomalies = []
     if anom_path.exists():
         try:
             with open(anom_path, "r") as f:
-                anomalies = json.load(f).get("anomalies", [])[:10]
+                raw_anomalies = json.load(f).get("anomalies", [])[:20]
+            # Suppress known Cloud Run false alarms
+            CLOUD_RUN_FALSE_ALARMS = [
+                "git command not found",
+                "git' is not recognized",
+                "system files (audit_log.json",
+                "system files are missing",
+                "chat_history.json) are missing",
+            ]
+            if IS_CLOUD_RUN:
+                anomalies = [
+                    a for a in raw_anomalies
+                    if not any(fa in a.get("description", "").lower() for fa in [s.lower() for s in CLOUD_RUN_FALSE_ALARMS])
+                ][:10]
+            else:
+                anomalies = raw_anomalies[:10]
         except (json.JSONDecodeError, IOError) as e:
             logging.warning(f"Could not load anomalies: {e}")
 
@@ -899,9 +1304,22 @@ async def chat_endpoint(
     # 1.1 LOAD DIRECTIVE
     directive_path = DIRECTIVES_DIR / f"{agent_id}.md"
     base_prompt = directive_path.read_text(encoding="utf-8") if directive_path.exists() else f"You are {agent_role}."
-    
-    # Inject Tools
-    base_prompt += "\n- Use 'git_status' for any code questions."
+
+    # 1.2 DYNAMIC CONTEXT INJECTION (v7)
+    # Map user_id to participant_id for context injection
+    _participant_map = {
+        "kamen_architect": "p_kamen", "kamen": "p_kamen", "p_kamen": "p_kamen",
+        "valentin": "p_valentin", "p_valentin": "p_valentin",
+        "biser": "p_biser", "p_biser": "p_biser",
+        "raina": "p_raina", "p_raina": "p_raina",
+    }
+    participant_id = _participant_map.get(user_id.lower(), user_id)
+    if INTEGRATION_TOOLS_LOADED:
+        try:
+            base_prompt = inject_context(base_prompt, agent_id, participant_id, HUB_CONFIG)
+            log_to_file(f"Context injected for {agent_id} (participant: {participant_id})")
+        except Exception as e:
+            log_to_file(f"Context injection failed (non-fatal): {e}")
 
     # 2. FILE HANDLING (Archive + Gemini Upload)
     if file and file.filename:
@@ -914,23 +1332,26 @@ async def chat_endpoint(
         # Explicit overrides
         if filename.endswith(".mp3"): mime = "audio/mp3"
         elif filename.endswith(".wav"): mime = "audio/wav"
-        elif filename.endswith(".ogg"): mime = "audio/ogg"
-        # REVERT: User confirms "Video" logic breaks recognition.
+        # REVERT: User confirms "Video" logic breaks recognition. 
         # Force AUDIO/WEBM to trigger Gemini's Audio model, not Video model.
-        elif filename.endswith((".webm", ".weba")):
+        elif filename.endswith((".webm", ".weba")): 
              mime = "audio/webm"
         
         clean_name = re.sub(r'[^a-zA-Z0-9_\-\.]', '_', file.filename)
         
+        # READ FILE BYTES ONCE (avoid double-read drain on Cloud Run)
+        file.file.seek(0)
+        file_bytes = file.file.read()
+        log_to_file(f"Read {len(file_bytes)} bytes from uploaded file.")
+
         # A) LOCAL ARCHIVE
         try:
             upload_dir = DATA_DIR / "uploads"
             upload_dir.mkdir(parents=True, exist_ok=True)
             save_path = upload_dir / f"{timestamp}_{clean_name}"
-            
-            file.file.seek(0)
+
             with open(save_path, "wb") as buffer:
-                buffer.write(file.file.read())
+                buffer.write(file_bytes)
             log_to_file(f"Archived to {save_path}")
         except Exception as e:
             log_to_file(f"Local Archive Failed: {e}")
@@ -939,27 +1360,23 @@ async def chat_endpoint(
         try:
             # Use /tmp for Cloud Run compatibility
             save_path = Path("/tmp") / f"{timestamp}_{clean_name}"
-            
-            file.file.seek(0)
+
             with open(save_path, "wb") as buffer:
-                buffer.write(file.file.read())
+                buffer.write(file_bytes)
             log_to_file(f"Archived to {save_path}")
+
+            log_to_file(f"Uploading as {mime} to Gemini from /tmp: {save_path}")
 
             upload_path = str(save_path)
             upload_mime = mime
 
-            # --- FIX: Convert ANY browser audio (WebM/OGG) to WAV for Gemini ---
-            if mime in ("audio/webm", "audio/ogg"):
-                wav_path = convert_webm_to_wav(str(save_path))
-                if wav_path and Path(wav_path).exists():
-                    upload_path = wav_path
-                    upload_mime = "audio/wav"
-                    log_to_file(f"Using converted WAV: {wav_path}")
-                else:
-                    log_to_file(f"WARNING: WAV conversion failed for {mime}, trying original as video/webm")
-                    upload_mime = "video/webm"  # Fallback
+            # --- v6.1 FIX (BUG #12): Send WebM directly to Gemini ---
+            # Gemini 2.5 supports WebM/Opus natively. ffmpeg conversion was unreliable
+            # and caused silent failures. Removed conversion step entirely.
+            if mime == "audio/webm":
+                upload_mime = "audio/webm"  # Gemini accepts this directly
+                log_to_file(f"Sending WebM audio directly to Gemini (no conversion)")
 
-            log_to_file(f"Uploading as {upload_mime} to Gemini from /tmp: {upload_path}")
             f_meta = local_client.files.upload(path=upload_path, config=types.UploadFileConfig(mime_type=upload_mime))
             file_uri = f_meta
             log_to_file(f"Gemini File ID: {f_meta.name}")
@@ -1049,6 +1466,15 @@ async def chat_endpoint(
             get_task_summary, check_overdue_tasks, check_upcoming_deadlines,
             get_daily_briefing,
         ]
+        # Integration tools (Drive & Notion) — only if loaded
+        if INTEGRATION_TOOLS_LOADED:
+            integration_tools = [
+                drive_list_files, drive_search, drive_get_file_content, drive_create_folder,
+                create_notion_task, query_notion_tasks, update_notion_task,
+                gtd_capture, gtd_get_next_actions, gtd_promote_to_next, gtd_complete_task,
+                send_agent_message, get_agent_messages, get_agent_routing_info,
+            ]
+            core_tools = core_tools + integration_tools
         try:
             skill_tools = plugin_loader.get_tool_list()
             if not isinstance(skill_tools, list):
@@ -1091,6 +1517,29 @@ async def chat_endpoint(
                     "check_upcoming_deadlines": check_upcoming_deadlines,
                     "get_daily_briefing": get_daily_briefing,
                 }
+                # Agent Bus tools (sync)
+                if INTEGRATION_TOOLS_LOADED:
+                    CORE_TOOL_MAP.update({
+                        "send_agent_message": send_agent_message,
+                        "get_agent_messages": get_agent_messages,
+                        "get_agent_routing_info": get_agent_routing_info,
+                    })
+                # Integration tools (async — Drive & Notion)
+                ASYNC_TOOL_MAP = {}
+                if INTEGRATION_TOOLS_LOADED:
+                    ASYNC_TOOL_MAP = {
+                        "drive_list_files": drive_list_files,
+                        "drive_search": drive_search,
+                        "drive_get_file_content": drive_get_file_content,
+                        "drive_create_folder": drive_create_folder,
+                        "create_notion_task": create_notion_task,
+                        "query_notion_tasks": query_notion_tasks,
+                        "update_notion_task": update_notion_task,
+                        "gtd_capture": gtd_capture,
+                        "gtd_get_next_actions": gtd_get_next_actions,
+                        "gtd_promote_to_next": gtd_promote_to_next,
+                        "gtd_complete_task": gtd_complete_task,
+                    }
 
                 for call in resp.function_calls:
                     log_to_file(f"Executing tool: {call.name}")
@@ -1106,6 +1555,16 @@ async def chat_endpoint(
                             tag = "[SYSTEM]" if "report" in call.name or "briefing" in call.name else "[SYSTEM_LOG]"
                             final_text += f"\n{tag}: {res}\n"
                             response_parts.append(types.Part.from_function_response(name=call.name, response={"result": res}))
+                        elif call.name in ASYNC_TOOL_MAP:
+                            import asyncio
+                            args = dict(call.args or {})
+                            # Inject agent_id for scoped access
+                            if "agent_id" in args or "agent_id" in ASYNC_TOOL_MAP[call.name].__code__.co_varnames:
+                                args.setdefault("agent_id", agent_id)
+                            res = await ASYNC_TOOL_MAP[call.name](**args)
+                            tag = "[DRIVE]" if "drive" in call.name else "[NOTION]"
+                            final_text += f"\n{tag}: {json.dumps(res, ensure_ascii=False, default=str)[:500]}\n"
+                            response_parts.append(types.Part.from_function_response(name=call.name, response={"result": json.dumps(res, ensure_ascii=False, default=str)}))
                         elif call.name in plugin_loader.tools:
                             res = plugin_loader.execute(call.name, **(call.args or {}))
                             # Auto-upload generated documents to Google Drive
@@ -1148,17 +1607,31 @@ async def chat_endpoint(
             log_to_file("Warning: final_text is empty. Forcing fallback.")
             final_text = "Командата е изпълнена успешно, но не беше генериран текст. Моля, проверете таблото за управление."
 
-        # --- NEW: Extract transcript from audio responses ---
+        # 5.5 OUTPUT GUARD — enforce style, banned words, constraints
+        if INTEGRATION_TOOLS_LOADED:
+            guard_result = guard_output(final_text, agent_id=agent_id)
+            if guard_result["cleaned"]:
+                log_to_file(f"Guard: {len(guard_result['violations'])} violations cleaned for {agent_id}: {guard_result['violations'][:3]}")
+            final_text = guard_result["text"]
+
+        # 5.6 SAFETY NET — strip any remaining internal tags (v6.1.1)
+        _internal_tag_re = re.compile(r'\[(TOOL|SYSTEM|SYSTEM_LOG|DRIVE|NOTION|DELEGATE_TO:\s*\w+)\]:?\s*[^\n]*', re.IGNORECASE)
+        if _internal_tag_re.search(final_text):
+            log_to_file(f"SafetyNet: stripping leaked internal tags for {agent_id}")
+            final_text = _internal_tag_re.sub('', final_text)
+            final_text = re.sub(r'\n{3,}', '\n\n', final_text).strip()
+
+        # --- Extract transcript from audio responses ---
         transcript = None
-        if file_received and mime and mime.startswith("audio/") and "[TRANSCRIPT]:" in final_text:
-            transcript_match = re.search(r'\[TRANSCRIPT\]:\s*(.+?)(?:\n|$)', final_text, re.DOTALL)
+        if file_received and mime.startswith("audio") and "[TRANSCRIPT]:" in final_text:
+            import re as _re
+            transcript_match = _re.search(r'\[TRANSCRIPT\]:\s*(.+?)(?:\n|$)', final_text, _re.DOTALL)
             if transcript_match:
                 transcript = transcript_match.group(1).strip()
-                log_to_file(f"Extracted transcript: {transcript[:80]}...")
 
-        # 6. LOG & PERSIST
-        chat_mgr.add_message(thread_id, "user", original_user_text)
-        chat_mgr.add_message(thread_id, "assistant", final_text)
+        # 6. LOG & PERSIST (v6.1: include agent_role for cross-director labeling fix)
+        chat_mgr.add_message(thread_id, "user", original_user_text, agent_role=agent_role)
+        chat_mgr.add_message(thread_id, "assistant", final_text, agent_role=agent_role)
         audit_mgr.log(agent_role, original_user_text, final_text)
 
         response_payload = {"status": "success", "response": final_text}
