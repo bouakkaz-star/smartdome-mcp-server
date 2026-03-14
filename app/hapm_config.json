@@ -1,10 +1,10 @@
 {
-    "project_name": "SmartDome OS v5",
+    "project_name": "SmartDome OS v6",
     "description": "Hub Model for Intelligent Architecture",
-    "version": "5.1.5",
-    "hapm_core_version": "5.0",
+    "version": "6.0.0",
+    "hapm_core_version": "6.0",
     "system": {
-        "model_provider": "gemini-3-flash-preview",
+        "model_provider": "gemini-2.5-flash",
         "default_thread_prefix": "smartdome_clean",
         "memory_provider": "zep_cloud",
         "reporting_cycle": "Friday 17:00"
@@ -121,8 +121,8 @@
                 "clo",
                 "designer"
             ],
-            "password_hash": null,
-            "is_initialized": false
+            "password_hash": "$2b$12$8uYT1X3c9OgZjOb5Pn5jUuNkOwQtcx7qUH/yZwgHv/9KSoGkb6VBi",
+            "is_initialized": true
         },
         {
             "id": "p_kamen",
@@ -135,19 +135,19 @@
                 "ralf",
                 "designer"
             ],
-            "password_hash": null,
-            "is_initialized": false
+            "password_hash": "$2b$12$ZqSXZ55p5Fm/sI2K5wS7Kefs4p4FmX8t4gH4YgS4wFqW1G5/i19uO",
+            "is_initialized": true
         },
         {
             "id": "p_biser",
             "slug": "biser-99",
             "name": "Biser Petrov",
-            "role": "CTO/Founder",
+            "role": "CTO/Lead Engineer",
             "access": [
                 "cto"
             ],
-            "password_hash": null,
-            "is_initialized": false
+            "password_hash": "$2b$12$ZqSXZ55p5Fm/sI2K5wS7Kefs4p4FmX8t4gH4YgS4wFqW1G5/i19uO",
+            "is_initialized": true
         },
         {
             "id": "p_raina",
