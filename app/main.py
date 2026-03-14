@@ -142,8 +142,11 @@ print(f"DEBUG_STARTUP: GEMINI_API_KEY exists: {bool(GOOGLE_API_KEY)}", file=sys.
 print(f"DEBUG_STARTUP: ZEP_API_KEY exists: {bool(ZEP_API_KEY)}", file=sys.stderr, flush=True)
 print(f"DEBUG_STARTUP: NOTION_API_KEY exists: {bool(os.getenv('NOTION_API_KEY'))}", file=sys.stderr, flush=True)
 
+# --- Cloud Run Environment Detection ---
+IS_CLOUD_RUN = os.getenv("K_SERVICE") is not None or os.getenv("CLOUD_RUN_JOB") is not None
+
 # Forcibly reload Notion tools in Cloud Run to catch env vars
-if IS_CLOUD_RUN or True: # Force for now to be safe
+if IS_CLOUD_RUN:
     reload_notion_tools()
 
 _IS_LOCAL = "Personal assistant" in str(_SERVER_ROOT)
@@ -183,8 +186,6 @@ else:
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-# --- Cloud Run Environment Detection ---
-IS_CLOUD_RUN = os.getenv("K_SERVICE") is not None or os.getenv("CLOUD_RUN_JOB") is not None
 
 # --- Ensure critical data files exist (prevents RALF false alarms) ---
 _REQUIRED_DATA_FILES = {
